@@ -71,6 +71,20 @@ for문 또는 while문의 블럭 ({})내에 선언된 지역변수는 지역변�
 
 
 
+*기본형 매개변수와 참조형 매개변수
+primitive type				vs		reference type
+call by value				vs		call by reference
+
+기본형 매개변수							참조형 매개변수
+변수의 값을 읽기만 할 수 있다				변수의 값을 읽고 변경할 수 있다.
+read only							read & write
+기본값만 할당 가능						인스턴스 주소값만 할당가능
+
+
+
+
+
+
 
 
 
