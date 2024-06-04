@@ -21,22 +21,25 @@ public class StringEx8 {
 //		2022년07월27일 
 
 		afterCharPosition = originStr.indexOf("/");
-		System.out.println(afterCharPosition);
-		tempYyyyStr = originStr.substring(beforeCharPosition, afterCharPosition) + "년";
-		System.out.println(tempYyyyStr);
+//		System.out.println(afterCharPosition);
+		tempYyyyStr = originStr.substring(beforeCharPosition, afterCharPosition) 
+			+ "년";
+//		System.out.println(tempYyyyStr);
 		
 		beforeCharPosition = afterCharPosition + 1;
 		
 		afterCharPosition = originStr.indexOf("/", beforeCharPosition+1);
-		System.out.println(afterCharPosition);
-		tempMmStr = originStr.substring(beforeCharPosition, afterCharPosition) + "월";
+//		System.out.println(afterCharPosition);
+		tempMmStr = originStr.substring(beforeCharPosition, afterCharPosition) 
+			+ "월";
 //		System.out.println(tempYyyyStr);
 		
 		beforeCharPosition = afterCharPosition + 1;
 		
 		afterCharPosition = originStr.length();
 //		System.out.println(afterCharPosition);
-		tempDdStr = originStr.substring(beforeCharPosition, afterCharPosition) + "일";
+		tempDdStr = originStr.substring(beforeCharPosition, afterCharPosition) 
+			+ "일";
 //		System.out.println(tempYyyyStr);
 		
 		changeStr = tempYyyyStr + tempMmStr + tempDdStr;
