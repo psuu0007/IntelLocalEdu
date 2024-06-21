@@ -1,0 +1,41 @@
+13윈도우 함수.txt
+
+
+*WINDOW FUNCTION 개요
+기존 관계형 데이터베이스는 컬럼과 컬럼간의 연산, 비교, 연결이나
+집합에 대한 집계는 쉬운 반면,
+행과 행간의 관계를 정의하거나, 행과 행간을 비교하는 것을 하나의 SQL문으로
+처리하는 것은 매우 어려운 문제였다.
+PL/SQL, PRO*C 같은 절차형 프로그램을 작성하거나,
+INLINE VIEW를 이용해 복잡한 SQL문을 작성해야 하던 것을 
+부분적이나마 행과 행간의 관계를 쉽게 정의하기 위해 만든 함수가 바로
+WINDOW FUNCTION이다. 
+윈도우 함수를 활용하면 복잡한 프로그램을 하나의 SQL문장으로 쉽게 해결할 수 있다
+
+표현식
+WINDOW 함수에는 OVER 문구가 키워드로 필수 포함된다
+SELECT WINDOW_FUNCTION (AGUMENTS) OVER
+([PARTITION BY 컬럼] [ORDER BY 절] [WINDOWING 절])
+FROM 테이블명;
+
+- WINDOW-FUNCTION
+: 기존에 사용하던 함수도 있고, 새롭게 WINDOW 함수용으로 추가된 함수도 있다
+-ARGUMENTS(인수)
+:함수에 따라 0-N 개의 인수가 지정될 수 있다
+-PARTITION BY절
+:전체 집합을 기준에 의해 소그룹으로 나눌 수 있다
+-ORDER BY절
+:어떤 항목에 대해 순위를 지정할지 ORDER BY절을 기술한다
+-WINDOWING절
+:함수의 대상이 되는 행 기준의 범위를 강력하게 지정할 수 있따
+ROWS는 물리적인 결과 행의 수를, RANGE는 논리적인 값에 의한 범위를 나타내는데,
+둘 중의 하나를 선택해서 사용할 수 있다.
+다만, WINDOWING 절은 SQL SERVER에서는 지원하지 않는다
+
+
+
+
+
+
+
+

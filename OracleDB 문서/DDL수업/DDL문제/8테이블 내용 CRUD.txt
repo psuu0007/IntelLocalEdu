@@ -1,0 +1,63 @@
+8테이블 내용 CRUD.txt
+
+
+
+문제
+
+1.서브 쿼리문을 이용하여 sam01 테이블을 생성하시오
+
+empno	ename		job			sal
+	
+1000	APPLE		police		10000
+1010	BANANA		nurse		15000
+1020	orange		DOCTOR		25000
+
+1_2.SMA01테이블에 아래와 같은 형태로 데이터를 추가하시오
+
+empno	ename		job			sal
+	
+1000	APPLE		police		10000
+1010	BANANA		nurse		15000
+1020	orange		DOCTOR		25000
+1030	VERY					25000
+1040	CAT						 2000
+
+
+EMP1 테이블에서 작업
+2.모든 사원의 급여를 10% 인상시키시오
+
+
+
+3.사원의 입사일에 20년을 더하시오
+
+
+4.EMP를 활용해서 SAM2 테이블을 만드는데
+ENAME	SAL	 COMM	HIREDATE	DEPTNO 컬럼만 있다
+12명의 사원이 있는데
+
+DALLAS에 위치한 부서의 소속 사원들의 급여를 1000 인상하고
+COMM을 300원 인상하시오
+
+
+5.SAM1 테이블에서 직급이 정해지지 않은 사원을 삭제하시오 
+EMPNO	ENAME	JOB		SAL
+1000   APPLE   police   10000
+1010   BANANA   nurse   15000
+1020   orange   DOCTOR   25000
+1030   VERY      NULL		25000
+1040   CAT      NULL		2000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
