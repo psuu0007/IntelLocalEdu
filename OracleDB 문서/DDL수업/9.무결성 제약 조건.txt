@@ -56,6 +56,19 @@ NOT NULL	NN
 CHECK		CK
 
 
+*Check와 Defaullt의 제약조건
+
+
+
+*제약 조건 변경하기
+ALTER CONSTRAINT
+
+
+*제약조건의 비활성화 CASCADE
+제약조건을 비활성화 한다
+
+
+시퀀스, 트랜잭션, 계정, 프로젝트 ERD
 
 
 
