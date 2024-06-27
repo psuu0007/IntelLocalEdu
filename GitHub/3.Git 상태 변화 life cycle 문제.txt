@@ -1,0 +1,19 @@
+3.Git 상태 변화 life cycle 문제.txt
+
+
+
+문제
+
+1.myGithub_test 레파지토리 생성
+
+2.이클립스에서 Gugudan_Github 프로젝트 생성
+
+3.GugudanTest 클래스 생성 gugudan.edu 패키지에
+
+4.2단만 출력하는거 구현
+
+5.이클립스 프로젝트를 깃허브에 반영하시오
+
+
+
+

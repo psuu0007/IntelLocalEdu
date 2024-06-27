@@ -1,0 +1,30 @@
+3.Git 상태 변화 life cycle.txt
+
+
+
+*이클립스 같은 툴에서 하는 방법
+- 이클립스 프로젝트를 깃허브에 반영하는 법(미완성)
+(프로젝트 단위로 선택)team share -> synchlonize -> add index ->
+commit -> push
+
+D:\IntelLocalEdu1\eclipse-workspace\qwert에 사용할 프로젝트\src\basic\edu\service
+
+이클립스
+D:\IntelLocalEdu1\eclipse-workspace\
+
+
+D:\IntelLocalEduRepository\psuu0007\qwert\qwert에 사용할 프로젝트\src\basic\edu\service
+
+깃허브 관리(로컬 저장소)
+D:\IntelLocalEduRepository\psuu0007\
+
+- 이클립스 프로젝트를 깃허브에 반영하는 법(완성)
+
+(프로젝트 단위로 선택)team share -> pull request -> 
+synchlonize -> add index -> commit -> push
+
+
+
+
+
+ 
