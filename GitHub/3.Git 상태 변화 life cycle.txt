@@ -24,7 +24,10 @@ D:\IntelLocalEduRepository\psuu0007\
 synchlonize -> add index -> commit -> push
 
 
-
-
+*충돌없이 협업하는 방법
+-서로 누가 먼저 파일을 조작할지 말하고 작업한다
+-동시에 변경하지 않는다
+-한 사람의 조작이 다 끝난 후 다른 사람이 파일을 조작할 수 있도록 
+알려준다
 
  
