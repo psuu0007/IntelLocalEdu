@@ -67,6 +67,36 @@ body 태그로 나누어 진다
 -tag 선택자
 
 
+*DOM CRUD
+태그 관리(manage)
+
+메서드명					설명
+createElement		태그를 생성하는 메서드
+createTextNode		텍스트를 생성하는 메서드
+appendChild			태그를 부모와 자식의 관계로 만들어주는 메서드
+					부모 태그.appendChild(자식 태그)
+						
+removeChild			태그를 제거해 주는 메서드
+					부모.removeChild(자식) -> 자식만 지워진다
+
+insertBefore		태그에 새로운 자식을 추가
+					부모 태그.insertBefore(새로운 자식, 선택 태그 자식)
+					선택 태그 자식 앞에 새로운 자식 태그를 추가
+replaceChild		부모 태그의 자식인 선택 태그를 새 태그로 덮어 씌움
+					부모.replaceChild(새 태그, 선택 태그)
+cloneNode			선택태그.cloneNode(true or false)
+					선택태그를 복제하여 true인 경우에는 하위 태그까지 모두 복제		
+	
+getAttribute		
+setAttribute
+removeAttribute			
+
+
+
+
+
+
+
 
 
 
