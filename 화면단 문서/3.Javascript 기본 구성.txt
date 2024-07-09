@@ -93,7 +93,11 @@ removeAttribute
 
 
 
+*자바스크립트 함수명 명명규칙
+자바랑 동일한데
+함수명 끝은 fnc를 붙인다
 
+ex: testFnc()
 
 
 
