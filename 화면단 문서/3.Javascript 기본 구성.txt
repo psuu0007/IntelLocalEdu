@@ -99,11 +99,25 @@ removeAttribute
 
 ex: testFnc()
 
+함수
+내장 함수? 과거에 쓰던 표현
+기본 함수 표현  	VS   	사용자 정의 함수
+이미 제공되는 것				기본이 아닌 것?, 내가 만든 것
 
 
+*toggle 토글?
+on/ off 처럼 두 상태중 하나를 선택하여 사용하는 키를 말합니다. 
+쉽게 말하면 켰다 껐다 하는 것 입니다.
 
 
+*이벤트 event
+onclick = 함수명 대신 
+표준 이벤트 방식인 addEventListener를 사용하자
 
+*표현식(expression)
+적용할 태그.addEventListener(이벤트명type, 적용할 함수function(e) {
+	수행하고 싶은 코드들
+}, 이벤트 작동 원리 설정capture);
 
 
 
