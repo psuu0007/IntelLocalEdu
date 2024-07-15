@@ -49,20 +49,20 @@
 	function rootDivFunc() {
 		alert('rootDiv');
 // 		alert(this.nodeName);
-// 		alert(event.target.nodeName);
+		alert(event.target.nodeName);
 	}
 
 	function parentPFunc() {
 		alert('parentP');
 // 		alert(this.nodeName);
-// 		alert(event.target.nodeName);
+		alert(event.target.nodeName);
 
 	}
 
 	function childBtnFunc() {
 		alert("childBtn");
 // 		alert(this.nodeName);
-// 		alert(event.target.nodeName);
+		alert(event.target.nodeName);
 	}
 </script>
 </head>

@@ -54,14 +54,14 @@
 	function rootDivFunc() {
 		alert('rootDiv');
 // 		alert(this.nodeName);
-// 		alert(event.target.nodeName);
+		alert(event.target.nodeName);
 		alert(this.title);
 	}
 
 	function parentDivFunc() {
 		alert('parentDiv');
 // 		alert(this.nodeName);
-// 		alert(event.target.nodeName);
+		alert(event.target.nodeName);
 
 		alert(this.title);
 	}
@@ -69,7 +69,7 @@
 	function childBtnFunc() {
 		alert("childBtn");
 // 		alert(this.nodeName);
-// 		alert(event.target.nodeName);
+		alert(event.target.nodeName);
 		alert(this.title);
 	}
 </script>
