@@ -165,4 +165,14 @@ Browser Object Model
 *location
 웹 브라우저의 주소(URL) 관련 정보를 다루는 객체이다
 
+*navigator
+브라우저에 대한 정보를 제공하는 객체
+
+
+*CDATA(Unparsed Character Data)
+자바스크립트가 만들어진 초창기에 웹브라우저가자바스크립트로 인식하지 못하고 html로 
+인식하여 인터프리팅 하는 것을 방지하기 위해서였습니다.
+html 주석으로 감싸 스크립트 부분을 주석으로 인식하게 하는 것
+
+
 
