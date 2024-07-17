@@ -175,4 +175,7 @@ Browser Object Model
 html 주석으로 감싸 스크립트 부분을 주석으로 인식하게 하는 것
 
 
+Document < Window < Object
+
+
 
