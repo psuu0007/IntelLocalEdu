@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns="https://jakarta.ee/xml/ns/jakartaee" 
+	xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee 
+	https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd" id="WebApp_ID" 
+	version="6.0">
+	
+  <display-name>webMiniBoardBasic</display-name>
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <servlet>
+  	<servlet-name>HelloWorld</servlet-name>
+  	<servlet-class>stu.edu.servlet.HelloWorld</servlet-class>
+  	<init-param>
+  		<param-name>email</param-name>
+  		<param-value>tj@stu.com</param-value>
+  	</init-param>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>HelloWorld</servlet-name>
+  	<url-pattern>/HelloWorld</url-pattern>
+  </servlet-mapping>
+  
+  
+</web-app>
