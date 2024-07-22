@@ -12,6 +12,7 @@ import jakarta.servlet.GenericServlet;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import jakarta.servlet.annotation.WebServlet;
 
 
 /**
@@ -19,6 +20,7 @@ import jakarta.servlet.ServletResponse;
  *회원 목록 조회 구현
  * 
  */
+@WebServlet(value = "/member/list")
 public class MemberListServlet extends GenericServlet{
 
 
@@ -80,7 +82,9 @@ public class MemberListServlet extends GenericServlet{
 			while(rs.next() == true) {
 				out.println(
 					rs.getInt("MEMBER_NO") + "," +
-					rs.getString("MEMBER_NAME") + "," +
+					"<a href='./update?memberNo=" + rs.getInt("MEMBER_NO") + 
+					"'>" +
+					rs.getString("MEMBER_NAME") + "</a>, " +
 					rs.getString("EMAIL") + "," +
 					rs.getDate("CRE_DATE") + "<br>"
 				);
@@ -122,7 +126,5 @@ public class MemberListServlet extends GenericServlet{
 		} // finally 종료
 		
 	} // service 종료
-
-	
 	
 }

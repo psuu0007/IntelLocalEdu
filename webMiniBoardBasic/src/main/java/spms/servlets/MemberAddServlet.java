@@ -64,8 +64,8 @@ public class MemberAddServlet extends HttpServlet {
 			String sql = "";
 			
 			sql = "INSERT INTO MEMBER";
-			sql += " (MEMBER_NO, EMAIL, PWD, MEMBER_NAME, CRE_DATE, MOD_DATE)";
-			sql += " VALUES(MEMBER_NO_SEQ.NEXTVAL, ?, ?, ?, SYSDATE, SYSDATE)";
+			sql += "(MEMBER_NO, EMAIL, PWD, MEMBER_NAME, CRE_DATE, MOD_DATE)";
+			sql += "VALUES(MEMBER_NO_SEQ.NEXTVAL, ?, ?, ?, SYSDATE, SYSDATE)";
 			
 			pstmt = conn.prepareStatement(sql);
 			
@@ -75,27 +75,34 @@ public class MemberAddServlet extends HttpServlet {
 			
 			pstmt.executeUpdate();
 			
+			// 다른 화면 혹은 다른 서블릿을 호출하는 메서드
+			res.sendRedirect("./list");
+			
 			// 사용자에게 백단에서 무슨 일이 벌어진건지 알려주는 화면을 제작해야함
-			res.setContentType("text/html");
-			res.setCharacterEncoding("UTF-8");
+//			res.setContentType("text/html");
+//			res.setCharacterEncoding("UTF-8");
 			
-			PrintWriter out = res.getWriter();
+//			PrintWriter out = res.getWriter();
 			
-			String htmlStr = "";
+//			String htmlStr = "";
+//			
+//			htmlStr += "<html>";
+//			htmlStr += "<head>";
+////			htmlStr += "<meta charset='UTF-8' " 
+////			+ "http-equiv='Refresh' content='2; url=list'>";
+//			htmlStr += "<meta charset='UTF-8'>";
+//			htmlStr += "<title>회원등록 결과</title>";
+//			htmlStr += "</head>";
+//			htmlStr += "<body>";
+//			htmlStr += "<p>";
+//			htmlStr += "등록 성공입니다!";
+//			htmlStr += "</p>";
+//			htmlStr += "</body>";
+//			htmlStr += "</html>";
+//			
+//			out.println(htmlStr);
 			
-			htmlStr += "<html>";
-			htmlStr += "<head>";
-			htmlStr += "<meta charset='UTF-8'>";
-			htmlStr += "<title>회원등록 결과</title>";
-			htmlStr += "</head>";
-			htmlStr += "<body>";
-			htmlStr += "<p>";
-			htmlStr += "등록 성공입니다!";
-			htmlStr += "</p>";
-			htmlStr += "</body>";
-			htmlStr += "</html>";
-			
-			out.println(htmlStr);
+//			res.addHeader("Refresh", "20; url=./list");
 			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
