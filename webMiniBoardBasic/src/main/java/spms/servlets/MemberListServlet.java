@@ -4,15 +4,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
-import jakarta.servlet.GenericServlet;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 
 /**
@@ -21,31 +22,32 @@ import jakarta.servlet.annotation.WebServlet;
  * 
  */
 @WebServlet(value = "/member/list")
-public class MemberListServlet extends GenericServlet{
-
+public class MemberListServlet extends HttpServlet {
 
 	@Override
-	public void service(ServletRequest req, ServletResponse res) 
+	protected void doGet(HttpServletRequest req, HttpServletResponse res)
 		throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-//		JDBC 수행 순서
 //		DB 객체 준비
 		Connection conn = null;
-		Statement stmt = null;
+		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";
-		String user = "edu";
-		String password = "edu12";
+		ServletContext sc = this.getServletContext();
+		
+		String driver = sc.getInitParameter("driver");
+		String url = sc.getInitParameter("url");
+		String user = sc.getInitParameter("user");
+		String password = sc.getInitParameter("password");
 		
 		try {
 //			오라클 객체 불러오기
-			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Class.forName(driver);
 			// 드라이브매니저에 jdbc 등록 -> db 연결 -> db 객체
 			conn = DriverManager.getConnection(url, user, password);
 //			sql 실행 객체 준비
-			stmt = conn.createStatement();
+			
 			
 			String sql = "";
 			
@@ -53,8 +55,10 @@ public class MemberListServlet extends GenericServlet{
 			sql += " FROM MEMBER";
 			sql += " ORDER BY MEMBER_NO ASC";
 			
+			pstmt = conn.prepareStatement(sql);
+			
 			// db에 sql문 전달, 실행
-			rs = stmt.executeQuery(sql);
+			rs = pstmt.executeQuery(sql);
 			
 			res.setContentType("text/html");
 			res.setCharacterEncoding("UTF-8");
@@ -86,7 +90,10 @@ public class MemberListServlet extends GenericServlet{
 					"'>" +
 					rs.getString("MEMBER_NAME") + "</a>, " +
 					rs.getString("EMAIL") + "," +
-					rs.getDate("CRE_DATE") + "<br>"
+					rs.getDate("CRE_DATE") + "," + 
+					"<a href='./delete?memberNo=" + 
+					rs.getInt("MEMBER_NO") + "'>[삭제]</a>" + 
+					"<br>"					
 				);
 			}
 			out.println("</body></html>");
@@ -105,9 +112,9 @@ public class MemberListServlet extends GenericServlet{
 				}
 			}
 			
-			if(stmt != null) {
+			if(pstmt != null) {
 				try {
-					stmt.close();
+					pstmt.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -125,6 +132,13 @@ public class MemberListServlet extends GenericServlet{
 			
 		} // finally 종료
 		
-	} // service 종료
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse res) 
+		throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		super.doPost(req, res);
+	}
 	
 }

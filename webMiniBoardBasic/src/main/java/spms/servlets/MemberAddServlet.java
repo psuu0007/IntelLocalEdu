@@ -8,10 +8,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+@WebServlet(value = "/member/add")
 public class MemberAddServlet extends HttpServlet {
 	
 	@Override
@@ -54,6 +56,8 @@ public class MemberAddServlet extends HttpServlet {
 		String password = "edu12";
 		
 		try {
+//			req.setCharacterEncoding("UTF-8");
+			
 			String emailStr = req.getParameter("email");
 			String pwdStr = req.getParameter("password");
 			String memberNameStr = req.getParameter("memberName");

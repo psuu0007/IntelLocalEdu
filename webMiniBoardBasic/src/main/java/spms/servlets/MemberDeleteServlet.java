@@ -16,18 +16,19 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@SuppressWarnings("serial")
-@WebServlet(urlPatterns = {"/member/update"})
-public class MemberUpdateServlet extends HttpServlet {
+@WebServlet(value = "/member/delete")
+public class MemberDeleteServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) 
 		throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
+//		사용자가 입력한 영어 이외의 글자들이 깨지는 현상을 방지하는 코드
+//		req.setCharacterEncoding("UTF-8");
+		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 		
 		ServletContext sc = this.getServletContext();
 		
@@ -36,8 +37,6 @@ public class MemberUpdateServlet extends HttpServlet {
 		String user = sc.getInitParameter("user");
 		String password = sc.getInitParameter("password");
 		
-//		db 조회를 위해, 화면을 데이터 기반으로 구성하기 위해 필요한 데이터
-		// 왜 오류일까? Cannot parse null string
 		int memberNo = Integer.parseInt(req.getParameter("memberNo"));
 		
 		String sql = "";
@@ -48,65 +47,19 @@ public class MemberUpdateServlet extends HttpServlet {
 			System.out.println("오라클 드라이버 로드");
 			conn = DriverManager.getConnection(url, user, password);
 			
-			sql = "SELECT MEMBER_NO, EMAIL, MEMBER_NAME, CRE_DATE";
-			sql += " FROM MEMBER";
+			
+			
+			
+			sql = "DELETE FROM MEMBER";
 			sql += " WHERE MEMBER_NO = ?";
 			
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setInt(1, memberNo);
 			
-			rs = pstmt.executeQuery();
+			pstmt.executeUpdate();
 			
-			String memberName = "";
-			String email = "";
-			Date creDate = null;
-			
-			while (rs.next()) {
-				memberName = rs.getString("MEMBER_NAME");
-				email = rs.getString("EMAIL");
-				creDate = rs.getDate("CRE_DATE");
-				
-			}
-			
-			// 사용자에게 백단에서 무슨 일이 벌어진건지 알려주는 화면을 제작해야함
-			res.setContentType("text/html");
-			res.setCharacterEncoding("UTF-8");
-			
-			PrintWriter out = res.getWriter();
-			
-			String htmlStr = "";
-			
-			htmlStr += "<html>";
-			htmlStr += "<head>";
-			htmlStr += "<title>회원상세 정보</title>";
-			htmlStr += "</head>";
-			htmlStr += "<body>";
-			htmlStr += "<h1>회원정보</h1>";
-			htmlStr += "<form action='./update' method='post'>";
-			htmlStr += "번호: <input type='text' name='memberNo'"
-					+ " value='" + memberNo + "'";
-			htmlStr += " readonly='readonly'><br>";
-			htmlStr += "이름: <input type='text' name='memberName'"
-					+ " value='" + memberName + "'><br>";
-			htmlStr += "이메일: <input type='text' name='email'"
-					+ " value='" + email + "'><br>";
-			htmlStr += "가입일: " + creDate + " <br>";
-			htmlStr += "<input type='submit' value='정보 수정'> ";
-			
-			htmlStr += "<input type='button' value='삭제' "
-					+ "onclick='location.href=\"./delete?memberNo=" 
-					+ memberNo + "\"'> ";
-			
-			htmlStr += "<input type='button' value='취소' "
-					+ "onclick='location.href=\"./list\"'>";
-			htmlStr += "</form>";
-			htmlStr += "</body>";
-			htmlStr += "</html>";
-			
-			out.println(htmlStr);
-			
-			System.out.println("회원 상세 정보 수정 페이지 잘 되나?");
+			res.sendRedirect("./list");
 			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -115,14 +68,6 @@ public class MemberUpdateServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
-			if(rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
 			
 			if(pstmt != null) {
 				try {
