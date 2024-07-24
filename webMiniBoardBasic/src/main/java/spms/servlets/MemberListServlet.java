@@ -107,7 +107,15 @@ public class MemberListServlet extends HttpServlet {
 			dispatcher.include(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ServletException(e);
+			
+//			throw new ServletException(e);
+			request.setAttribute("error", e);
+			request.setAttribute("caseByCase", "상황에 맞는 처리 부탁");
+			
+			RequestDispatcher dispatcher = 
+				request.getRequestDispatcher("/Error.jsp");
+			dispatcher.forward(request, response);
+//			건네준다
 		} finally {
 //			db 객체 메모리 해제
 			if(rs != null) {

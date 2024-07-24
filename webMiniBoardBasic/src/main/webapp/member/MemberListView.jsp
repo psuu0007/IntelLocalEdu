@@ -21,6 +21,10 @@
 
 
 <body>
+
+	<jsp:include page="/Header.jsp"/>
+	
+	<h1>회원 목록</h1>
 	<p>
 		<a href="./add">신규 회원 등록</a>
 	</p>
@@ -44,6 +48,8 @@
 	<%
 		} // for end
 	%>
+	
+	<jsp:include page="/Tail.jsp"/>
 
 </body>
 </html>
