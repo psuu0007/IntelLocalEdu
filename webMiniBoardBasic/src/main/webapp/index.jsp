@@ -12,19 +12,25 @@
 </style>
 
 <script type="text/javascript">
-	
+
+	function pageMoveMemberListFnc() {
+		location.href = './member/list';
+	}
+
 </script>
-<%
-	int num = 10;
-%>
+
 </head>
 
 
-<body>
-	<h1>hello 제이에스피&서블릿</h1>
-	<p>환영합니다</p>
 
-<%="임시" %>
+
+
+<body>
+	<h1>hello 제이에스피&amp;서블릿</h1>
+	<p>환영합니다</p>
+	
+	<button onclick="pageMoveMemberListFnc();">회원목록으로 이동</button>
+
 
 </body>
 </html>

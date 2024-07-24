@@ -1,19 +1,22 @@
 package spms.servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import spms.dto.MemberDto;
 
 
 /**
@@ -24,8 +27,11 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(value = "/member/list")
 public class MemberListServlet extends HttpServlet {
 
+	private static final long serialVersionUID = 1L;
+
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse res)
+	protected void doGet(HttpServletRequest request
+		, HttpServletResponse response)
 		throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
@@ -34,20 +40,26 @@ public class MemberListServlet extends HttpServlet {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
-		ServletContext sc = this.getServletContext();
+		String driver = "";
+		String url = "";
+		String user = "";
+		String password = ""; 
 		
-		String driver = sc.getInitParameter("driver");
-		String url = sc.getInitParameter("url");
-		String user = sc.getInitParameter("user");
-		String password = sc.getInitParameter("password");
-		
+//		try문 안에 예외처리가 관련이 없더라도 
+//		모든 관련 로직은 어떤 문제가 생기는지 알 수 있도록 처리해야 한다
 		try {
+			ServletContext sc = this.getServletContext();
+			
+			driver = sc.getInitParameter("driver");
+			url = sc.getInitParameter("url");
+			user = sc.getInitParameter("user");
+			password = sc.getInitParameter("password");
+			
 //			오라클 객체 불러오기
 			Class.forName(driver);
 			// 드라이브매니저에 jdbc 등록 -> db 연결 -> db 객체
 			conn = DriverManager.getConnection(url, user, password);
 //			sql 실행 객체 준비
-			
 			
 			String sql = "";
 			
@@ -60,47 +72,42 @@ public class MemberListServlet extends HttpServlet {
 			// db에 sql문 전달, 실행
 			rs = pstmt.executeQuery(sql);
 			
-			res.setContentType("text/html");
-			res.setCharacterEncoding("UTF-8");
+			response.setContentType("text/html");
+			response.setCharacterEncoding("UTF-8");
 			
-			PrintWriter out = res.getWriter();
+			ArrayList<MemberDto> memberList = new ArrayList<MemberDto>();
 			
-			String htmlStr = "";
+			int memberNo = 0;
+			String memberName = "";
+			String email = "";
+			Date creDate = null;
 			
-			
-			htmlStr += "<p>";
-			htmlStr += "<a href='./add'>신규 회원 등록</a>";
-			htmlStr += "</p>";
-		
-			
-			out.println("<html><head><meta charset='UTF-8'>"
-				+ "<title>회원목록</title>"
-				+ "</head>");
-			
-			
-			out.println("<body><h1>회원목록</h1>");
-			// 신규회원 등록
-			out.print(htmlStr);
-			
-//			select 결과 활용
-			while(rs.next() == true) {
-				out.println(
-					rs.getInt("MEMBER_NO") + "," +
-					"<a href='./update?memberNo=" + rs.getInt("MEMBER_NO") + 
-					"'>" +
-					rs.getString("MEMBER_NAME") + "</a>, " +
-					rs.getString("EMAIL") + "," +
-					rs.getDate("CRE_DATE") + "," + 
-					"<a href='./delete?memberNo=" + 
-					rs.getInt("MEMBER_NO") + "'>[삭제]</a>" + 
-					"<br>"					
-				);
+			MemberDto memberDto = null;
+			while(rs.next()) {
+				memberNo = rs.getInt("MEMBER_NO");
+				memberName = rs.getString("MEMBER_NAME");
+				email = rs.getString("EMAIL");
+				creDate = rs.getDate("CRE_DATE");
+				
+				memberDto = new MemberDto();
+				
+				memberDto.setMemberNo(memberNo);
+				memberDto.setMemberName(memberName);
+				memberDto.setEmail(email);
+				memberDto.setCreatedDate(creDate);
+				
+				memberList.add(memberDto);
 			}
-			out.println("</body></html>");
-		} catch (ClassNotFoundException e) {
+			
+			request.setAttribute("memberList", memberList);
+			
+			RequestDispatcher dispatcher =
+				request.getRequestDispatcher("/member/MemberListView.jsp");
+			
+			dispatcher.include(request, response);
+		} catch (Exception e) {
 			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new ServletException(e);
 		} finally {
 //			db 객체 메모리 해제
 			if(rs != null) {
