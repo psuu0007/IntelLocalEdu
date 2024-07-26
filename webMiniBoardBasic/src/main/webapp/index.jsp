@@ -13,8 +13,8 @@
 
 <script type="text/javascript">
 
-	function pageMoveMemberListFnc() {
-		location.href = './member/list';
+	function pageMoveLoginFnc() {
+		location.href = './auth/login';
 	}
 
 </script>
@@ -29,7 +29,7 @@
 	<h1>hello 제이에스피&amp;서블릿</h1>
 	<p>환영합니다</p>
 	
-	<button onclick="pageMoveMemberListFnc();">회원목록으로 이동</button>
+	<button onclick="pageMoveLoginFnc();">로그인 화면으로 이동</button>
 
 
 </body>

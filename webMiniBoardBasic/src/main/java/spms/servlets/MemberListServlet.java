@@ -40,26 +40,11 @@ public class MemberListServlet extends HttpServlet {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
-		String driver = "";
-		String url = "";
-		String user = "";
-		String password = ""; 
-		
-//		try문 안에 예외처리가 관련이 없더라도 
-//		모든 관련 로직은 어떤 문제가 생기는지 알 수 있도록 처리해야 한다
 		try {
 			ServletContext sc = this.getServletContext();
-			
-			driver = sc.getInitParameter("driver");
-			url = sc.getInitParameter("url");
-			user = sc.getInitParameter("user");
-			password = sc.getInitParameter("password");
-			
-//			오라클 객체 불러오기
-			Class.forName(driver);
-			// 드라이브매니저에 jdbc 등록 -> db 연결 -> db 객체
-			conn = DriverManager.getConnection(url, user, password);
-//			sql 실행 객체 준비
+		
+			// 미리 준비된 DB 객체 불러오기
+			conn = (Connection)sc.getAttribute("conn");
 			
 			String sql = "";
 			
@@ -136,14 +121,7 @@ public class MemberListServlet extends HttpServlet {
 				}
 			}
 			
-			if(conn != null) {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			
 			
 		} // finally 종료
 		

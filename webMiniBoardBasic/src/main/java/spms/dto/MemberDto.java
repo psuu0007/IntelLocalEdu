@@ -26,6 +26,12 @@ public class MemberDto {
 		this.modifiedDate = modifiedDate;
 	}
 
+	public MemberDto(String email, String memberName) {
+		// TODO Auto-generated constructor stub
+		this.email = email;
+		this.memberName = memberName;
+	}
+
 	public int getMemberNo() {
 		return memberNo;
 	}

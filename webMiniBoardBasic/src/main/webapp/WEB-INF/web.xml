@@ -24,18 +24,12 @@
 		<param-value>edu12</param-value>
 	</context-param>
 
-<!-- 	<servlet> -->
-<!-- 		<servlet-name>MemberUpdateServlet</servlet-name> -->
-<!-- 		<servlet-class>spms.servlets.MemberUpdateServlet</servlet-class> -->
-<!-- 	</servlet> -->
-<!-- 	<servlet-mapping> -->
-<!-- 		<servlet-name>MemberUpdateServlet</servlet-name> -->
-<!-- 		<url-pattern>/member/update</url-pattern> -->
-<!-- 	</servlet-mapping> -->
+	<servlet>
+		<servlet-name>AppInitServlet</servlet-name>
+		<servlet-class>spms.servlets.AppInitServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 	
-
-
-
 	<filter>
 		<filter-name>CharacterEncodingFilter</filter-name>
 		<filter-class>spms.filters.CharacterEncodingFilter</filter-class>

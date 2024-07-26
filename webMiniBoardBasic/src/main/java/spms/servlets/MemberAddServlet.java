@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet(value = "/hotel/add")
+@WebServlet(value = "/member/add")
 public class MemberAddServlet extends HttpServlet {
 	
 	@Override
