@@ -29,9 +29,25 @@
 		<a href="./add">신규 회원 등록</a>
 	</p>
 	
+	<jsp:useBean id="memberList"
+		scope="request"
+		class="java.util.ArrayList"
+		type="java.util.ArrayList<spms.dto.MemberDto>"
+	/>
+	
+<%-- 	<%  --%>
+<!-- 		java.util.ArrayList<MemberDto> memberList =  -->
+<!-- 		(ArrayList<MemberDto>)request.getAttribute("memberList"); -->
+<!-- 		if(memberList == null){ -->
+<!-- 			memberList = new ArrayList<spms.dto.MemberDto>(); -->
+<!-- 			request.setAttribute("memberList", memberList); -->
+<!-- 		} -->
+	
+<!-- 	%> -->
+	
 	<%
-		ArrayList<MemberDto> memberList = 
-			(ArrayList<MemberDto>)request.getAttribute("memberList");
+// 		ArrayList<MemberDto> memberList = 
+// 			(ArrayList<MemberDto>)request.getAttribute("memberList");
 		for(MemberDto memberDto : memberList) {
 		
 	%>
