@@ -2,9 +2,6 @@ package spms.servlets;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletContext;
@@ -14,6 +11,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import spms.dao.MemberDao;
 import spms.dto.MemberDto;
 
 @WebServlet(value = "/auth/login")
@@ -33,59 +31,43 @@ public class LoginServlet extends HttpServlet{
 		// TODO Auto-generated method stub
 		
 		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 		
 		try {
 			ServletContext sc = this.getServletContext();
 		
 			// 미리 준비된 DB 객체 불러오기
 			conn = (Connection)sc.getAttribute("conn");
+			MemberDao memberDao = new MemberDao();
+			memberDao.setConnection(conn);
 			
 			String email = req.getParameter("email");
 			String pwd = req.getParameter("password");
-			String memberName = "";
 			
-			String sql = "";
-			int colIndex = 1;
+			MemberDto memberDto;
 			
-			sql += "SELECT MEMBER_NO, EMAIL, MEMBER_NAME";
-			sql += " FROM MEMBER";
-			sql += " WHERE EMAIL = ? AND PWD = ?";
+			memberDto = memberDao.memberExist(email, pwd);
 			
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(colIndex++, email);
-			pstmt.setString(colIndex, pwd);
-			
-			rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
-				email = rs.getString("EMAIL");
-				memberName = rs.getString("MEMBER_NAME");
-				
-				MemberDto memberDto = new MemberDto(email, memberName);
-				
-				HttpSession session = req.getSession();
-				
-				
-				session.setAttribute("memberDto", memberDto);
-				
-				res.sendRedirect("../member/list");
-			}else {
+			// 회원이 없다면 로그인 실패 페이지로 이동
+			if(memberDto == null) {
 				RequestDispatcher dispatcher 
 					= req.getRequestDispatcher("LoginFail.jsp");
-				
+			
+				req.setAttribute("email", email);
 				dispatcher.forward(req, res);
+				return;
 			}
 			
+			HttpSession session = req.getSession();
+			session.setAttribute("memberDto", memberDto);
+			
+			res.sendRedirect("../member/list");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			
-//			throw new ServletException(e);
 			req.setAttribute("error", e);
-			req.setAttribute("caseByCase", "상황에 맞는 처리 부탁");
+//			req.setAttribute("caseByCase", "상황에 맞는 처리 부탁");
+			req.setAttribute("msg1", "로그인을 실패하였습니다");
 			
 			RequestDispatcher dispatcher = 
 				req.getRequestDispatcher("/Error.jsp");

@@ -2,14 +2,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
+<script type="text/javascript">
+	function pageMoveMemberListFnc() {
+		location.href = '/webMiniBoardBasic/member/list';
+	}
+	
+	function pageMoveFreeBoardListFnc() {
+		location.href = '/webMiniBoardBasic/freeBoard/list';
+	}
+</script>
+
 <jsp:useBean id="memberDto"
 	scope="session"
 	class="spms.dto.MemberDto"
 />
 
-<%-- <% --%>
-<!-- 	MemberDto sessionMemberDto = (MemberDto)session.getAttribute("memberDto"); -->
-<!-- %> -->
 
 <div style="background-color: #DD7C73; color: #fff; 
 	height: 20px; padding: 5px;">
@@ -21,4 +28,6 @@
 		<a style="color: white;" 
 			href="<%=request.getContextPath()%>/auth/logout">로그아웃</a>
 	</span>
+	<span style="border: 1px solid black;" onclick="pageMoveMemberListFnc();">회원</span>
+	<span style="border: 1px solid black;" onclick="pageMoveFreeBoardListFnc();">자유게시판</span>
 </div>

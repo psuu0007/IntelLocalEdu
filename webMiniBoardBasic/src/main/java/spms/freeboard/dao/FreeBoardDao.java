@@ -1,4 +1,4 @@
-package spms.dao;
+package spms.freeboard.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletContext;
 import spms.dto.MemberDto;
+import spms.freeboard.dto.FreeBoardDto;
+import spms.freeboard.dto.MemberFreeBoardDto;
 
-public class MemberDao {
+public class FreeBoardDao {
 
 	private Connection connection;
 
@@ -20,46 +20,52 @@ public class MemberDao {
 		this.connection = conn;
 	}
 
-	public List<MemberDto> selectList() throws Exception {
+	public List<FreeBoardDto> selectList() throws Exception {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
 		try {
 			String sql = "";
 
-			sql += "SELECT MEMBER_NO, EMAIL, PWD, MEMBER_NAME, CRE_DATE";
-			sql += " FROM MEMBER";
-			sql += " ORDER BY MEMBER_NO ASC";
+			sql += "SELECT  FREE_BOARD_ID, MEMBER_NO, FREE_BOARD_TITLE,";
+			sql += " FREE_BOARD_CONTENT, FREE_BOARD_WRITER,";
+			sql += " CREATE_DATE, UPDATE_DATE";
+			sql += " FROM FREE_BOARD";
+			sql += " ORDER BY FREE_BOARD_ID DESC";
 
 			pstmt = connection.prepareStatement(sql);
 
 			rs = pstmt.executeQuery(sql);
 
-			int memberNo = 0;
-			String memberName = "";
-			String email = "";
-			Date creDate = null;
+			int freeBoardId = 0; 
+			int memberNo = 0; 
+			String freeBoardTitle = "";     
+			String freeBoardContent = "";
+			String freeBoardWriter = "";
+			Date createDate = null;
+			Date updateDate = null;
 
-			ArrayList<MemberDto> memberList = new ArrayList<MemberDto>();
+			ArrayList<FreeBoardDto> FreeBoardList = 
+				new ArrayList<FreeBoardDto>();
 
-			MemberDto memberDto = null;
+			FreeBoardDto FreeBoardDto = null;
 			while (rs.next()) {
+				freeBoardId = rs.getInt("FREE_BOARD_ID");
 				memberNo = rs.getInt("MEMBER_NO");
-				email = rs.getString("EMAIL");
-				memberName = rs.getString("MEMBER_NAME");
-				creDate = rs.getDate("CRE_DATE");
+				freeBoardTitle = rs.getString("FREE_BOARD_TITLE");
+				freeBoardContent = rs.getString("FREE_BOARD_CONTENT");
+				freeBoardWriter = rs.getString("FREE_BOARD_WRITER");
+				createDate = rs.getDate("CREATE_DATE");
+				updateDate = rs.getDate("UPDATE_DATE");
+				
+				FreeBoardDto = new FreeBoardDto(freeBoardId, memberNo, 
+					freeBoardTitle, freeBoardContent, freeBoardWriter, 
+					createDate, updateDate);
 
-				memberDto = new MemberDto(memberNo, email, memberName, creDate);
-
-//				memberDto.setMemberNo(memberNo);
-//				memberDto.setMemberName(memberName);
-//				memberDto.setEmail(email);
-//				memberDto.setCreatedDate(creDate);
-
-				memberList.add(memberDto);
+				FreeBoardList.add(FreeBoardDto);
 			}
 
-			return memberList;
+			return FreeBoardList;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -86,7 +92,7 @@ public class MemberDao {
 		} // finally 종료
 	}
 	
-	// 회원등록
+	// 자유게시판 등록
 	public int memberInsert(MemberDto memberDto) throws Exception {
 		int result = 0;
 		PreparedStatement pstmt = null;
@@ -162,38 +168,49 @@ public class MemberDao {
 		return result;
 	}
 	
-	// 회원 상세 정보 조회
-	public MemberDto memberSelectOne(int memberNo) throws Exception{
-		MemberDto memberDto = null;
+	// 자유게시판 상세 정보 조회
+	public MemberFreeBoardDto freeBoardSelectOne(int freeBoardId) throws Exception{
+		MemberFreeBoardDto memberFreeBoardDto = null;
 		
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
 		String sql = "";
 		
-		sql += "SELECT MEMBER_NO, EMAIL, MEMBER_NAME, CRE_DATE";
-		sql += " FROM MEMBER";
-		sql += " WHERE MEMBER_NO = ?";
+		sql += "SELECT FB.MEMBER_NO, FB.FREE_BOARD_TITLE,";
+		sql += " FB.FREE_BOARD_WRITER, FB.FREE_BOARD_ID,";
+		sql += " M.EMAIL, FB.CREATE_DATE,";
+		sql += " FB.FREE_BOARD_CONTENT";
+		sql += " FROM FREE_BOARD FB INNER JOIN MEMBER M";
+		sql += " ON FB.MEMBER_NO = M.MEMBER_NO";
+		sql += " WHERE FB.FREE_BOARD_ID = ?";
 		
 		try {
 			pstmt = connection.prepareStatement(sql);
 			
-			pstmt.setInt(1, memberNo);
+			pstmt.setInt(1, freeBoardId);
 			
 			rs = pstmt.executeQuery();
 			
-			String memberName = "";
-			String email = "";
-			Date creDate = null;
+			int memberNo = 0; // 외래키
+			String freeBoardTitle = "";     
+			String freeBoardWriter = "";
+			String email = "";	// 유니크키
+			Date createDate = null;
+			String freeBoardContent = "";
 			
 			if(rs.next()) {
-				memberNo = rs.getInt("MEMBER_NO");
-				memberName = rs.getString("MEMBER_NAME");
+				memberNo = rs.getInt("MEMBER_NO");; // 외래키
+				freeBoardTitle = rs.getString("MEMBER_NAME");     
+				freeBoardWriter = rs.getString("MEMBER_NAME");
 				email = rs.getString("EMAIL");
-				creDate = rs.getDate("CRE_DATE");
-				
-				memberDto = 
-					new MemberDto(memberNo, email, memberName, creDate);
+				createDate = rs.getDate("CRE_DATE");
+				freeBoardContent = rs.getString("MEMBER_NAME");
+
+				memberFreeBoardDto = 
+					new MemberFreeBoardDto(memberNo, freeBoardTitle, 
+						freeBoardWriter, freeBoardId, email, createDate, 
+						freeBoardContent);
 			}else {
 				throw new Exception("해당 번호의 회원을 찾을 수 없습니다.");
 			}
@@ -219,7 +236,7 @@ public class MemberDao {
 			}
 		} // finally end
 		
-		return memberDto;
+		return memberFreeBoardDto;
 	}
 	
 	//회원 정보 변경

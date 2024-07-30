@@ -4,7 +4,7 @@
 <html>
 
 <head>
-<meta charset="UTF-8" http-equiv="Refresh" content="5;url=./login">
+<meta charset="UTF-8" http-equiv="Refresh" content="10;url=./login">
 <title>로그인 실패</title>
 
 <style type="text/css">
@@ -35,7 +35,7 @@
 	</pre>
 	
 	<div>
-		<span>입력하신 이메일</span><span></span>
+		<span>입력하신 이메일</span><span>${email}</span>
 	</div>  
 
 	<button onclick="loginFnc();">로그인 페이지로 이동</button>
