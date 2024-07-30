@@ -1,17 +1,19 @@
 package spms.servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import spms.dao.MemberDao;
+import spms.dto.MemberDto;
 
 @WebServlet(value = "/member/add")
 public class MemberAddServlet extends HttpServlet {
@@ -20,27 +22,9 @@ public class MemberAddServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) 
 		throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("doGet을 수행");
 		
-		res.setContentType("text/html");
-		res.setCharacterEncoding("UTF-8");
-		PrintWriter out = res.getWriter();
+		res.sendRedirect("./MemberForm.jsp");
 		
-		String htmlStr = "";
-		
-		htmlStr += "<html><head><title>회원 등록</title></head>";
-		htmlStr += "<body>";
-		htmlStr += "<h1>회원등록</h1>";
-		htmlStr += "<form action='add' method='post'>";
-		htmlStr += "이름: <input type='text' name='memberName'><br>";
-		htmlStr += "이메일: <input type='text' name='email'><br>";
-		htmlStr += "암호: <input type='password' name='password'><br>";
-		htmlStr += "<input type='submit' value='추가'>";
-		htmlStr += "<input type='reset' value='취소'>";
-		htmlStr += "</form>";
-		htmlStr += "</body></html>";
-		
-		out.println(htmlStr);
 	}
 	
 	@Override
@@ -49,90 +33,45 @@ public class MemberAddServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		
 		Connection conn = null;
-		PreparedStatement pstmt = null;
-		
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";
-		String user = "edu";
-		String password = "edu12";
 		
 		try {
-//			req.setCharacterEncoding("UTF-8");
 			
 			String emailStr = req.getParameter("email");
 			String pwdStr = req.getParameter("password");
 			String memberNameStr = req.getParameter("memberName");
 			
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			conn = DriverManager.getConnection(url, user, password);
+			MemberDto memberDto = new MemberDto();
+			memberDto.setEmail(emailStr);
+			memberDto.setPassword(pwdStr);
+			memberDto.setMemberName(memberNameStr);
 			
-			String sql = "";
+			ServletContext sc = this.getServletContext();
+			conn = (Connection)sc.getAttribute("conn");
 			
-			sql = "INSERT INTO MEMBER";
-			sql += "(MEMBER_NO, EMAIL, PWD, MEMBER_NAME, CRE_DATE, MOD_DATE)";
-			sql += "VALUES(MEMBER_NO_SEQ.NEXTVAL, ?, ?, ?, SYSDATE, SYSDATE)";
+			MemberDao memberDao = new MemberDao();
+			memberDao.setConnection(conn);
+		
+			int result;
 			
-			pstmt = conn.prepareStatement(sql);
+			result = memberDao.memberInsert(memberDto);
 			
-			pstmt.setString(1, emailStr);
-			pstmt.setString(2, pwdStr);
-			pstmt.setString(3, memberNameStr);
+			// 0이면 추가한 회원이 없다는 의미
+			// 1이면 추가한 회원이 한명 있다는 의미
+			if(result == 0) {
+				System.out.println("회원가입 실패");
+			}
 			
-			pstmt.executeUpdate();
-			
-			// 다른 화면 혹은 다른 서블릿을 호출하는 메서드
 			res.sendRedirect("./list");
 			
-			// 사용자에게 백단에서 무슨 일이 벌어진건지 알려주는 화면을 제작해야함
-//			res.setContentType("text/html");
-//			res.setCharacterEncoding("UTF-8");
-			
-//			PrintWriter out = res.getWriter();
-			
-//			String htmlStr = "";
-//			
-//			htmlStr += "<html>";
-//			htmlStr += "<head>";
-////			htmlStr += "<meta charset='UTF-8' " 
-////			+ "http-equiv='Refresh' content='2; url=list'>";
-//			htmlStr += "<meta charset='UTF-8'>";
-//			htmlStr += "<title>회원등록 결과</title>";
-//			htmlStr += "</head>";
-//			htmlStr += "<body>";
-//			htmlStr += "<p>";
-//			htmlStr += "등록 성공입니다!";
-//			htmlStr += "</p>";
-//			htmlStr += "</body>";
-//			htmlStr += "</html>";
-//			
-//			out.println(htmlStr);
-			
-//			res.addHeader("Refresh", "20; url=./list");
-			
-		} catch (ClassNotFoundException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally {
-			if(pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			req.setAttribute("error", e);
+			RequestDispatcher dispatcher = 
+				req.getRequestDispatcher("/Error.jsp");
 			
-			if(conn != null) {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		} // finally end
+			dispatcher.forward(req, res);
+		}
 		
 	}
 	

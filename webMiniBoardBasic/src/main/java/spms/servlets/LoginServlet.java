@@ -67,6 +67,8 @@ public class LoginServlet extends HttpServlet{
 				MemberDto memberDto = new MemberDto(email, memberName);
 				
 				HttpSession session = req.getSession();
+				
+				
 				session.setAttribute("memberDto", memberDto);
 				
 				res.sendRedirect("../member/list");
@@ -89,27 +91,7 @@ public class LoginServlet extends HttpServlet{
 				req.getRequestDispatcher("/Error.jsp");
 			dispatcher.forward(req, res);
 //			건네준다
-		} finally {
-//			db 객체 메모리 해제
-			if(rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			
-			if(pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			
-		} // finally 종료
+		} 
 	}
 	
 }

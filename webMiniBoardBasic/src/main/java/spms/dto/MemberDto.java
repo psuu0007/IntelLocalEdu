@@ -32,6 +32,15 @@ public class MemberDto {
 		this.memberName = memberName;
 	}
 
+	public MemberDto(int memberNo, String email, String memberName
+		, Date createdDate) {
+		super();
+		this.memberNo = memberNo;
+		this.email = email;
+		this.memberName = memberName;
+		this.createdDate = createdDate;
+	}
+
 	public int getMemberNo() {
 		return memberNo;
 	}
