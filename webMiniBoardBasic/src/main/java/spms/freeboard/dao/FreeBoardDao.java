@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import spms.dto.MemberDto;
 import spms.freeboard.dto.FreeBoardDto;
@@ -57,6 +59,7 @@ public class FreeBoardDao {
 				freeBoardWriter = rs.getString("FREE_BOARD_WRITER");
 				createDate = rs.getDate("CREATE_DATE");
 				updateDate = rs.getDate("UPDATE_DATE");
+				
 				
 				FreeBoardDto = new FreeBoardDto(freeBoardId, memberNo, 
 					freeBoardTitle, freeBoardContent, freeBoardWriter, 
@@ -169,7 +172,8 @@ public class FreeBoardDao {
 	}
 	
 	// 자유게시판 상세 정보 조회
-	public MemberFreeBoardDto freeBoardSelectOne(int freeBoardId) throws Exception{
+	public MemberFreeBoardDto freeBoardSelectOne(int freeBoardId) 
+		throws Exception{
 		MemberFreeBoardDto memberFreeBoardDto = null;
 		
 		PreparedStatement pstmt = null;
@@ -201,12 +205,16 @@ public class FreeBoardDao {
 			
 			if(rs.next()) {
 				memberNo = rs.getInt("MEMBER_NO");; // 외래키
-				freeBoardTitle = rs.getString("MEMBER_NAME");     
-				freeBoardWriter = rs.getString("MEMBER_NAME");
+				freeBoardTitle = rs.getString("FREE_BOARD_TITLE");     
+				freeBoardWriter = rs.getString("FREE_BOARD_WRITER");
+				freeBoardId = rs.getInt("FREE_BOARD_ID");
 				email = rs.getString("EMAIL");
-				createDate = rs.getDate("CRE_DATE");
-				freeBoardContent = rs.getString("MEMBER_NAME");
+				createDate = rs.getDate("CREATE_DATE");
+				freeBoardContent = rs.getString("FREE_BOARD_CONTENT");
 
+				Map<String, String> memberFreeBoardMap 
+					= new HashMap<String, String>();
+				
 				memberFreeBoardDto = 
 					new MemberFreeBoardDto(memberNo, freeBoardTitle, 
 						freeBoardWriter, freeBoardId, email, createDate, 

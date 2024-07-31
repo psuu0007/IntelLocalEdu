@@ -10,13 +10,34 @@
 
 <style type="text/css">
 table, tr, th, td{
-		border: 1px solid black;
-		border-collapse: collapse;
+	border: 1px solid black;
+	border-collapse: collapse;
 }
 </style>
 
 <script type="text/javascript">
-
+	function pageMoveFreeBoardDetailFnc(tableTdTag) {
+// 		alert(tableTdTag);
+		
+// 		alert(tableTdTag.parentNode);
+		
+		let parentTr = tableTdTag.parentNode;
+		
+		let freeBoardIdStr = parentTr.children[0].textContent;
+		
+		console.log(freeBoardIdStr);
+		
+// 		alert(freeBoardIdStr + "로 이동");
+		
+		let userSelectFreeBoardIdObj = 
+			document.getElementById('userSelectFreeBoardId');
+		userSelectFreeBoardIdObj.value = freeBoardIdStr;
+		
+		let freeBoardListFormObj = document.getElementById('freeBoardListForm');
+		freeBoardListFormObj.submit();
+	}
+	
+	
 </script>
 
 </head>
@@ -40,7 +61,9 @@ table, tr, th, td{
 	<c:forEach var="freeBoardDto" items="${freeBoardList}">
 		<tr>
 			<td>${freeBoardDto.freeBoardId}</td>
-			<td><a href='#'>${freeBoardDto.freeBoardTitle}</a></td>
+			<td onclick="pageMoveFreeBoardDetailFnc(this);">
+				${freeBoardDto.freeBoardTitle}
+			</td>
 			<td>${freeBoardDto.freeBoardWriter}</td>
 			<td>${freeBoardDto.createDate}</td>
 			<td>${freeBoardDto.updateDate}</td>
@@ -48,15 +71,11 @@ table, tr, th, td{
 	</c:forEach>	
 	</table>
 	
-	
-		
-<%-- 		<a href='./update?freeBoardNo=${freeBoardDto.freeBoardNo}'> --%>
-<%-- 			${freeBoardDto.freeBoardName} --%>
-<!-- 		</a>, -->
-<%-- 		<a href='./delete?freeBoardNo=${freeBoardDto.freeBoardNo}'>[삭제]</a> --%>
-	
-	
 	<jsp:include page="/Tail.jsp"/>
-
+	<form id='freeBoardListForm' action="./list" method="post">
+		<input id='userSelectFreeBoardId' type="hidden" 
+			name="freeBoardId" value="">
+	
+	</form>
 </body>
 </html>

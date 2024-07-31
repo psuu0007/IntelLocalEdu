@@ -6,7 +6,7 @@
 
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>자유게시판 상세페이지</title>
 
 <style type="text/css">
 	table, tr, th, td{
@@ -24,6 +24,7 @@
 
 .tableSubject{
 	width: 245px;
+	background-color: gray;
 }
 
 .tableValue{
@@ -32,14 +33,22 @@
 </style>
 
 <script type="text/javascript">
-
+	window.onload = function () {
+		// textarea 문자열 정렬 처리 로직
+		let textAreaTag = document.getElementById('textAreaTag');
+	//		alert(textAreaTag.textContent);
+		textAreaTag.textContent = textAreaTag.textContent.trim();
+	};
+	
+	
 </script>
 
 </head>
 
 
 <body>
-
+	<jsp:include page="/Header.jsp"/>
+	
 	<div id="container">
 
 		<table style="width: 1000px;">
@@ -62,21 +71,26 @@
 				<td class="tableValue">${memberFreeBoardDto.email}</td>
 				<td class="tableSubject">글생성일</td>
 				<td class="tableValue">
-				<fmt:formatDate value="${memberFreeBoardDto.createDate}" pattern="YYYY년MM월DD일 HH24:MI:SS" />
+				<fmt:formatDate value="${memberFreeBoardDto.createDate}" 
+					pattern="yyyy년 MM월 dd일 HH:mm:ss" />
 				</td>
 			</tr>
 			<tr>
 				<td style="width: 980px;" colspan="4">
-					<textarea rows="10" cols="100" style="width: 743px;">
+					<textarea id='textAreaTag' rows="10" cols="100" style="width: 990px;">
 						${memberFreeBoardDto.freeBoardContent}
 					</textarea>
 				</td>
 			</tr>
 		</table>
 		<div>
-			<span><button>이전페이지</button> <button>수정페이지로 이동</button></span>
+			<span>
+				<button onclick="pageMoveFreeBoardListFnc();">이전페이지</button>
+				<button>수정페이지로 이동</button>
+			</span>
 		</div>
 	</div>
-
+	
+	<jsp:include page="/Tail.jsp"/>
 </body>
 </html>

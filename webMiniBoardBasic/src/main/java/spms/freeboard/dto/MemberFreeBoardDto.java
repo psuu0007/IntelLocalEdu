@@ -2,6 +2,7 @@ package spms.freeboard.dto;
 
 import java.util.Date;
 
+// 1.조인을 하는 경우도 하나의 테이블이다 전략
 public class MemberFreeBoardDto {
 
     private int memberNo; // 외래키
