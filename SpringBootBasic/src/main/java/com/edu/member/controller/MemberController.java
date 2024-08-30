@@ -158,12 +158,15 @@ public class MemberController {
 	
 	// 회원탈퇴
 	@DeleteMapping("/delete/{memberNo}")
-	public ResponseEntity<String> memberDelete(@PathVariable("memberNo") int memberNo) {
+	public ResponseEntity<String> memberDelete(@PathVariable("memberNo") int memberNo)
+	{
 		log.info(logTitleMsg);
 		log.info("@DeleteMapping memberDelete: {}", memberNo);
 
 		memberService.memberDeleteOne(memberNo);
 
+		
+		
 		return ResponseEntity.ok("회원 삭제 성공");
 	}
 	

@@ -29,8 +29,8 @@
 				throw new Error('회원삭제 실패 했네');
 			}
 		}).then(function(data) {
-			alert(data);
-			
+// 			alert(data);
+					
 			location.href = './list';
 		}).catch(function(error){
 			alert(error.message || '회원삭제 시 통신에 문제 발생');

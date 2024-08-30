@@ -1,0 +1,8 @@
+ERD.txt
+
+데이터 모델링
+ERD(Entity Relationship Diagram)
+문자 그대로 해석하면 '개체들의 관계를 다이어그램 형식으로 표현한 것'
+쉽게 정리하면 데이터베이스의 구조를 한눈에 파악할 수 있게 시각화한 것이다
+
+https://www.erdcloud.com/ 무료 툴중 하나
