@@ -1,4 +1,4 @@
-package com.edu.home.SpringBootBasic;
+package com.edu;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
