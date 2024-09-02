@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.freeBoard">
+
+	<resultMap type="freeBoardVo" id="freeBoardResultMap">
+		<id column="FREE_BOARD_ID" property="freeBoardId" />
+		<result column="MEMBER_NO" property="memberNo" />
+		<result column="MEMBER_NAME" property="memberName" />
+		<result column="FREE_BOARD_TITLE" property="freeBoardTitle" />
+		<result column="FREE_BOARD_CONTENT" property="freeBoardContent" />
+		<result column="CREATE_DATE" property="createDate"
+			javaType="java.util.Date" />
+		<result column="UPDATE_DATE" property="updateDate"
+			javaType="java.util.Date" />
+	</resultMap>
+	
+	<select id="freeBoardSelectList" parameterType="map"
+		resultMap="freeBoardResultMap">
+		<![CDATA[
+		SELECT RNUM, FREE_BOARD.FREE_BOARD_ID, FREE_BOARD.MEMBER_NO
+		    , FREE_BOARD.MEMBER_NAME
+		    , FREE_BOARD.FREE_BOARD_TITLE, FREE_BOARD.FREE_BOARD_CONTENT
+		    , FREE_BOARD.CREATE_DATE, FREE_BOARD.UPDATE_DATE
+		FROM (  SELECT  ROWNUM RNUM, FB.FREE_BOARD_ID, FB.MEMBER_NO, FB.MEMBER_NAME, 
+		            FB.FREE_BOARD_TITLE, FB.FREE_BOARD_CONTENT, FB.CREATE_DATE, FB.UPDATE_DATE
+		        FROM (  SELECT  OFB.FREE_BOARD_ID, M.MEMBER_NO, M.MEMBER_NAME, 
+		                    OFB.FREE_BOARD_TITLE, OFB.FREE_BOARD_CONTENT
+		                    , OFB.CREATE_DATE, OFB.UPDATE_DATE
+		                FROM MEMBER M, FREE_BOARD OFB
+		                WHERE M.MEMBER_NO = OFB.MEMBER_NO
+		                ORDER BY OFB.FREE_BOARD_ID DESC) FB
+		) FREE_BOARD
+		WHERE RNUM >= #{start} AND RNUM <= #{end}
+		]]>
+	</select>
+
+	<select id="freeBoardSelectTotalCount" resultType="java.lang.Integer">
+		SELECT COUNT(*)
+		FROM FREE_BOARD
+	</select>
+</mapper>
