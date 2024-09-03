@@ -28,7 +28,7 @@ public class FreeBoardController {
 	private FreeBoardService freeBoardService;
 	
 	@RequestMapping(value = "/list", method = {RequestMethod.GET, RequestMethod.POST})
-	public ModelAndView freeBoardList(@RequestParam int curPage) {
+	public ModelAndView freeBoardList(@RequestParam(defaultValue = "1") int curPage) {
 		log.info(logTitleMsg);
 		log.info("@RequestMapping freeBoardList curPage: {}", curPage);
 		

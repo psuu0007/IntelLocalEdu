@@ -4,15 +4,17 @@ import java.io.Serializable;
 
 public class Paging implements Serializable{
 
-	public static final int PAGE_SCALE = 6;
-	public static final int BLOCK_SCALE = 3;
+	// 페이지당 게시물 수
+	public static final int PAGE_SCALE = 10;
+	// 화면당 블럭 수
+	public static final int BLOCK_SCALE = 5;
 	
-	private int curPage = 0;
+	private int curPage = 0; // 현재 페이지
 	
-	private int totPage;
-	private int totBlock;
+	private int totPage; // 전체 페이지 갯수
+	private int totBlock; // 전체 페이지 블록 갯수
 	
-	private int curBlock;
+	private int curBlock; // 현재 페이지 블록
 	
 	private int prevBlock;
 	private int nextBlock;

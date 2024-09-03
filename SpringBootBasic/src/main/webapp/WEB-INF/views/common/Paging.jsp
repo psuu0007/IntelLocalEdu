@@ -34,6 +34,12 @@ nav > ul > li > a:hover {
     font-weight: bold;
 }
 
+.active{
+	color: #FFD9EC;
+	background-color: #5D5D5D;
+	font-weight: bold;
+}
+
 </style>
 
 <script src="https://code.jquery.com/jquery-3.7.1.js" 
@@ -48,6 +54,13 @@ nav > ul > li > a:hover {
 		curPage.val(pageNumber);
 		
 		$('#pagingForm').submit();
+	}
+	
+	window.onload = function() {
+		var curPageDoc = $('#curPage');
+		var pageButtonId = '#pageButton' + curPageDoc.val();
+		
+		$(pageButtonId).addClass('active');
 	}
 </script>
 
@@ -65,7 +78,7 @@ nav > ul > li > a:hover {
 			
 			<c:forEach var="num" begin="${pagingMap.pagingVo.blockBegin}" 
 			end="${pagingMap.pagingVo.blockEnd}">
-			<li id="pageButton">   <!-- id문제 --> 
+			<li id="pageButton${num}">    
 				<a href="#" onclick="goPage(${num});"><c:out value="${num}"/></a>
 			</li>
 			</c:forEach>
