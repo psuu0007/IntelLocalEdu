@@ -25,5 +25,11 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 		// TODO Auto-generated method stub
 		return freeBoardDao.freeBoardSelectTotalCount();
 	}
+
+	@Override
+	public void freeBoardInsertOne(FreeBoardVo freeBoardVo) {
+		// TODO Auto-generated method stub
+		freeBoardDao.freeBoardInsertOne(freeBoardVo);
+	}
 	
 }

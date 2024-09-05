@@ -38,4 +38,15 @@
 		SELECT COUNT(*)
 		FROM FREE_BOARD
 	</select>
+	
+	<insert id="freeBoardInsertOne" 
+		parameterType="com.edu.freeBoard.domain.FreeBoardVo">
+		INSERT INTO FREE_BOARD
+		VALUE(  FREE_BOARD_ID, MEMBER_NO, FREE_BOARD_TITLE
+		    , FREE_BOARD_CONTENT, CREATE_DATE, UPDATE_DATE)
+		VALUES(FREE_BOARD_ID_SEQ.NEXTVAL, #{memberNo}, #{freeBoardTitle}, 
+		    #{freeBoardContent}, SYSDATE, SYSDATE)
+	</insert>
+	
+	
 </mapper>

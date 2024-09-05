@@ -7,6 +7,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,5 +53,20 @@ public class FreeBoardController {
 		mav.addObject("pagingMap", pagingMap);
 		
 		return mav;
+	}
+	
+	@PostMapping("/")
+	public ResponseEntity<Map<String, String>> 
+		freeBoardInsertCtr(@RequestBody FreeBoardVo freeBoardVo){
+		log.info(logTitleMsg);
+		log.info("@PostMapping freeBoardInsertCtr freeBoardVo: {}"
+			, freeBoardVo);
+		
+		freeBoardService.freeBoardInsertOne(freeBoardVo);
+		
+		Map<String, String> jsonMap = new HashMap<String, String>();
+		jsonMap.put("result", "success");
+		
+		return ResponseEntity.ok(jsonMap);
 	}
 }

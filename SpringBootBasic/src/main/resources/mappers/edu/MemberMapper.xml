@@ -23,7 +23,7 @@
 
 	<select id="memberExist" parameterType="map"
 		resultMap="memberResultMap">
-		SELECT MEMBER_NAME, EMAIL
+		SELECT MEMBER_NO, MEMBER_NAME, EMAIL
 		FROM MEMBER
 		WHERE EMAIL = #{email}
 		AND PWD = #{pwd}

@@ -16,19 +16,23 @@
 	height: 20px; padding: 5px;">
 	SPMS(Simple Project Management System)
 	
-	<span style="border: 1px solid black;" onclick="pageMoveMemberListFnc();">회원</span>
-	<span style="border: 1px solid black;" onclick="pageMoveFreeBoardListFnc();">
+	<span style="border: 1px solid black;" 
+		onclick="pageMoveMemberListFnc();">회원</span>
+	<span style="border: 1px solid black;" 
+		onclick="pageMoveFreeBoardListFnc();">
 		자유게시판
 	</span>
 	
 	
 	<c:if test="${sessionScope.member.email ne null}">
 	
-		<span style="float: right;">
-			${member.memberName}
-			<a style="color: white;" 
-				href="<%=request.getContextPath()%>/member/logout">로그아웃</a>
-		</span>
+	<span style="float: right;">
+		${member.memberName}
+		<input id='inputMemberNo' type="hidden" value="${member.memberNo}">
+		<a style="color: white;" 
+			href="<%=request.getContextPath()%>/member/logout">로그아웃</a>
+	</span>
+	
 	</c:if>
 	
 </div>
