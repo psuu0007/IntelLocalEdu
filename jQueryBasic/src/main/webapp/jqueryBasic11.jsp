@@ -5,7 +5,7 @@
 
 <head>
 <meta charset="UTF-8">
-<title>jqueryBasic10</title>
+<title>jqueryBasic11</title>
 
 <style type="text/css">
 .high-light{
@@ -36,35 +36,24 @@
 
 <script type="text/javascript">
 	$(document).ready(function () {
-// 		자바스크립트 방식
-// 		var object = {};
+		let arr = [
+			{name : 'media', addr: '한국'},
+			{name : '더조은', addr: '구로'},
+			{name : 'kitri', addr: '강남'}
+		];
+	
+		$.each(arr, function(i, obj) {
+			
+			var htmlStr = '';
+			
+			htmlStr += '<h1>';
+			htmlStr += i + '번호:&nbsp;'+ obj.name + '&nbsp;주소:&nbsp;' + obj.addr;
+			htmlStr += '</h1>';
 		
-// 		object.name = '이상현';
-// 		object.gender = 'Male';
-// 		object.money = 10000;
-		
-// 		console.log(object);
-		
-// 		for (var myVar in object) {
-// 			alert(myVar + "    \t:\t    " + object[myVar]);
-// 		}
-		
-		var obj = {};
-		
-		$.extend(obj, {
-			name : '이상현',
-			gender : 'Male',
-			money : 10000
+			document.body.innerHTML += htmlStr;
 		});
 		
-		console.log(obj);
 		
-		var output = '';
-		$.each(obj, function(key, value) {
-			output += key + ': ' + value + '\n';
-		});
-		
-		alert(output);
 	});
 	
 </script>

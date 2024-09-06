@@ -5,7 +5,7 @@
 
 <head>
 <meta charset="UTF-8">
-<title>jqueryBasic10</title>
+<title>jqueryTest7</title>
 
 <style type="text/css">
 .high-light{
@@ -36,35 +36,12 @@
 
 <script type="text/javascript">
 	$(document).ready(function () {
-// 		자바스크립트 방식
-// 		var object = {};
 		
-// 		object.name = '이상현';
-// 		object.gender = 'Male';
-// 		object.money = 10000;
+		동기들의 이름, 나이, 하고싶은 말을 배열 객체에 저장한다
 		
-// 		console.log(object);
+		객체 배열을 활용하여 각각의 div에 h1, h2, h3로 출력한다
 		
-// 		for (var myVar in object) {
-// 			alert(myVar + "    \t:\t    " + object[myVar]);
-// 		}
 		
-		var obj = {};
-		
-		$.extend(obj, {
-			name : '이상현',
-			gender : 'Male',
-			money : 10000
-		});
-		
-		console.log(obj);
-		
-		var output = '';
-		$.each(obj, function(key, value) {
-			output += key + ': ' + value + '\n';
-		});
-		
-		alert(output);
 	});
 	
 </script>
@@ -73,10 +50,10 @@
 
 <body>
 
-<!-- 	<h1>item - 0</h1> -->
-<!-- 	<h1>item - 1</h1> -->
-<!-- 	<h1>item - 2</h1> -->
-<!-- 	<h1>item - 3</h1> -->
-<!-- 	<h1>item - 4</h1> -->
+	<div><h1>이름: 조병철 나이: 30 하고싶은 말: 나는 전설이다</h1></div>
+	<div><h2>이름: 국하현 나이: 30 하고싶은 말: 나는 전설이다</h2></div>
+	<div>item - 2</div>
+	<div>item - 3</div>
+	
 </body>
 </html>
