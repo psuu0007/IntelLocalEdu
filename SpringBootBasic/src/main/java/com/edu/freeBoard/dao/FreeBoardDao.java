@@ -8,6 +8,9 @@ public interface FreeBoardDao {
 	public List<FreeBoardVo> freeBoardSelectList(int start, int end);
 	public int freeBoardSelectTotalCount();
 	
+	public FreeBoardVo freeBoardSelectOne(int freeBoardId);
+
 	public void freeBoardInsertOne(FreeBoardVo freeBoardVo);
+	public void freeBoardUpdateOne(FreeBoardVo freeBoardVo);
 	
 }

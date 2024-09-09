@@ -7,7 +7,12 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,4 +74,44 @@ public class FreeBoardController {
 		
 		return ResponseEntity.ok(jsonMap);
 	}
+	
+	//게시판 수정 화면으로 이동
+	@GetMapping("/{freeBoardId}")
+	public ResponseEntity<FreeBoardVo> 
+		freeBoardUpdate(@PathVariable int freeBoardId){
+		log.info(logTitleMsg);
+		log.info("@GetMapping freeBoardUpdate freeBoardId: {}"
+			, freeBoardId);
+		
+		FreeBoardVo freeBoardVo = 
+			freeBoardService.freeBoardSelectOne(freeBoardId);
+		
+		return ResponseEntity.ok(freeBoardVo);
+	}
+	
+	//게시판 수정 DB
+	@PatchMapping("/{freeBoardId}")
+	public ResponseEntity<?> 
+		freeBoardUpdateCtr(@PathVariable int freeBoardId
+			, @RequestBody FreeBoardVo freeBoardVo){
+		log.info(logTitleMsg);
+		log.info("@PatchMapping freeBoardUpdateCtr freeBoardId: {}, "
+				+ "freeBoardVo: {}", freeBoardId, freeBoardVo);
+		
+		if(freeBoardVo.getMemberNo() == 0) {
+			Map<String, String> errorResponseMap = new HashMap<>();
+			errorResponseMap.put("errorMsg", "게시판 등록자가 아닌것 같다.");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.contentType(MediaType.APPLICATION_JSON).body(errorResponseMap);
+		}
+		
+		System.err.println("???되나? " + freeBoardVo.getMemberNo());
+		
+		freeBoardService.freeBoardUpdateOne(freeBoardVo);
+		
+		freeBoardVo = freeBoardService.freeBoardSelectOne(freeBoardId);
+		
+		return ResponseEntity.ok(freeBoardVo);
+	}
+	
 }

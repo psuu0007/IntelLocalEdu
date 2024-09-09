@@ -478,4 +478,52 @@ yaml파일로 대체할 수 있음 (주의사항: 들여쓰기에 주의해야 �
 리턴한 데이터를 브라우저에 그대로 전달하기 때문에
 별도로 View 화면을 만들 필요가 없음
 
+*기존의 웹 접근 방식과 RESTful API 방식과의 차이점
+				기존 게시판						rest api를 지원하는 게시판
+글목록	get		/bbs/list					get		/bbs
+글읽기	get		/bbs/list/{articleId}		get		/bbs/{articleId}
+글등록	post	/bbs/list/regist			post	/bbs
+글삭제	get		/bbs/remove/{articleId}		delete	/bbs/{articleId}
+글수정	post	/bbs/modify/{articleId}		put, patch		/bbs/{articleId}
 
+기존의 게시판은 get, post만으로 crud를 처리하며, URI는 액션을 나타낸다
+rest 게시판은 4가지 메서드를 모두 사용하여 CRUD를 처리하며, URI는 제어하려는 자원을 나타낸다
+
+*rest 어노테이션 핵심
+@RequestBody : HTTP request body를 java 객체로 전달 받을 수 있다
+@ResponseBody: Java 객체를 HTTP Response Body로 전송할 수 있다
+자바객체를 XML이나 JSON으로 변환해서 전송할 수 있는 기능을 제공하고 있음
+
+*JSON(JavaScript Object Notation)
+web에서 data 교환 방식 - 사실상 표준
+json은 경량 data 교환 형식
+json 표현식은 사람과 기계 모두 이해하기 쉬우며 용량이 작아서,
+최근에는 json이 xml을 대체해서 데이터 전송 등에 많이 사용
+특정 언어에 종속되지 않으며, 대부분의 프로그래밍 언어에서 json 포맷의
+데이터를 핸들링 할 수 있는 라이브러리를 제공
+
+
+
+*Lombok
+여러가지 @어노테이션을 제공하고 컴파일 과정에서 
+자동으로 개발자가 원하는 메소드를 생성/주입 방식으로 동작하는 라이브러리입니다.
+
+-Lombok 롬복의 기능
+Lombok의 기능은 model 클래스나 Entity 같은 도메인 클래스 등에 반복되는 
+getter, setter, toString 등의 메소드를 자동으로 만들어주는 기능을 합니다.
+-Lombok 롬복의 장점
+Lombok은 복잡하고 반복되는 코드를 어노테이션 기반의 코드 자동생성으로 
+생산성이 향상되고 코드가 축소되어 가독성 및 유지보수성을 높일 수 있습니다.
+-Lombok 롬복의 단점
+코드가 직접 눈에 보이는게 아니므로 직관성이 떨어질수 있습니다.
+
+자주 사용되는 Lombok 어노테이션
+@NorgsConstructor : 파라미터가 없는 기본 생성자를 만들어줍니다.
+@AllArgsConstructor : 모든 필드 값을 파라미터로 받는 생성자를 만들어줍니다.
+@RequiredArgsConstructor : final이나 @NonNull 인 필드 값만 파라미터로 받는 생성자를 
+만들어줍니다.
+@EqualsAndHashCode : equals와 hashcode를 자동으로 생성해주는 어노테이션입니다.
+@Data는 위에서 설명한 Getter, Setter, RequiredArgsConstructor, ToString
+, EqualsAndHashCode를 한번에 설정해주는 어노테이션으로 실무에서는 
+너무 무겁고 객체의 안정성을 지키기 때문에 @Data의 활용을 지양합니다.
+@Builder : 자동으로 해당 클래스에 빌더를 추가해줍니다.

@@ -27,9 +27,21 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 	}
 
 	@Override
+	public FreeBoardVo freeBoardSelectOne(int freeBoardId) {
+		// TODO Auto-generated method stub
+		return freeBoardDao.freeBoardSelectOne(freeBoardId);
+	}
+	
+	@Override
 	public void freeBoardInsertOne(FreeBoardVo freeBoardVo) {
 		// TODO Auto-generated method stub
 		freeBoardDao.freeBoardInsertOne(freeBoardVo);
 	}
-	
+
+	@Override
+	public void freeBoardUpdateOne(FreeBoardVo freeBoardVo) {
+		// TODO Auto-generated method stub
+		freeBoardDao.freeBoardUpdateOne(freeBoardVo);
+	}
+
 }
