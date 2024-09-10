@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.edu.freeBoard.domain.FreeBoardVo;
@@ -62,12 +64,20 @@ public class FreeBoardController {
 	
 	@PostMapping("/")
 	public ResponseEntity<Map<String, String>> 
-		freeBoardInsertCtr(@RequestBody FreeBoardVo freeBoardVo){
+		freeBoardInsertCtr(@ModelAttribute FreeBoardVo freeBoardVo
+			, MultipartHttpServletRequest mhr){
 		log.info(logTitleMsg);
 		log.info("@PostMapping freeBoardInsertCtr freeBoardVo: {}"
 			, freeBoardVo);
 		
-		freeBoardService.freeBoardInsertOne(freeBoardVo);
+		
+		try {
+			freeBoardService.freeBoardInsertOne(freeBoardVo, mhr);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			log.info("자유게시판 추가에서 문제 발생 원래는 화면 처리");
+			e.printStackTrace();
+		}
 		
 		Map<String, String> jsonMap = new HashMap<String, String>();
 		jsonMap.put("result", "success");
@@ -77,16 +87,16 @@ public class FreeBoardController {
 	
 	//게시판 수정 화면으로 이동
 	@GetMapping("/{freeBoardId}")
-	public ResponseEntity<FreeBoardVo> 
+	public ResponseEntity<Map<String, Object>> 
 		freeBoardUpdate(@PathVariable int freeBoardId){
 		log.info(logTitleMsg);
 		log.info("@GetMapping freeBoardUpdate freeBoardId: {}"
 			, freeBoardId);
 		
-		FreeBoardVo freeBoardVo = 
+		Map<String, Object> resultMap = 
 			freeBoardService.freeBoardSelectOne(freeBoardId);
 		
-		return ResponseEntity.ok(freeBoardVo);
+		return ResponseEntity.ok(resultMap);
 	}
 	
 	//게시판 수정 DB
@@ -108,8 +118,8 @@ public class FreeBoardController {
 		System.err.println("???되나? " + freeBoardVo.getMemberNo());
 		
 		freeBoardService.freeBoardUpdateOne(freeBoardVo);
-		
-		freeBoardVo = freeBoardService.freeBoardSelectOne(freeBoardId);
+//		@todo 나중에 처리하자 원래 되던거
+//		freeBoardVo = freeBoardService.freeBoardSelectOne(freeBoardId);
 		
 		return ResponseEntity.ok(freeBoardVo);
 	}

@@ -53,6 +53,36 @@ tr > th{
 </style>
 
 <script type="text/javascript">
+	function storeFileMakeUlFnc(freeBoardFileList) {
+		const storeFileListUl = $('#storeFileList');
+		
+		storeFileListUl.html('');
+		let listItem = null;
+		if(freeBoardFileList.length == 0){
+			listItem = $('<li>저장된 파일이 없습니다.</li>');
+			
+			storeFileListUl.html(listItem);
+			return;
+		}
+		
+		var liHtmlStr = '';
+		for (let i = 0; i < freeBoardFileList.length; i++) {
+			listItem = document.createElement('li');
+			
+			liHtmlStr = freeBoardFileList[i].originalFileName
+			+ '&nbsp;&nbsp;'
+			+ freeBoardFileList[i].freeBoardFileSize + '(kb)'
+			+ '<img alt="image not found" src="/img/' 
+			+ freeBoardFileList[i].storedFileName 
+			+ '" style="width: 150px;" />'
+			+ '<span><input type="button" value="수정">'
+			+ '<input type="button" value="삭제"></span>';
+			
+			listItem.innerHTML = liHtmlStr;
+			storeFileListUl.append(listItem);
+		}
+	} // 파일 ui제작 함수 end
+	
 
 	$(document).ready(function () {
 // 		alert('???');
@@ -86,42 +116,86 @@ tr > th{
 			
 			htmlStr += '</table>';
 			
-			htmlStr += '<div>';
-			htmlStr += '<span>';
-			htmlStr += '<button onclick="pageMoveFreeBoardListFnc();">이전페이지</button>';
-			htmlStr += '<button id="btnFreeBoardInsert">작성완료</button>';
-			htmlStr += '</span>';
-			htmlStr += '</div>';
+	htmlStr += '<div id="fileContainer" style="border: 1px solid black;">';
+	htmlStr += '<label for="inputFreeBoardFile">파일</label>';
+	htmlStr += '<input type="file" id="inputFreeBoardFile" name="freeBoardFileList"';
+	htmlStr += ' multiple>';
+	htmlStr += '<ul id="fileList" class="fileUploadList"></ul>';
+	htmlStr += '</div>';
+	
+	htmlStr += '<div>';
+	htmlStr += '<span>';
+	htmlStr += '<button onclick="pageMoveFreeBoardListFnc();">이전페이지</button>';
+	htmlStr += '<button id="btnFreeBoardInsert">작성완료</button>';
+	htmlStr += '</span>';
+	htmlStr += '</div>';
 			
 			containerTag.html(htmlStr);
+			
+			const inputFreeBoardFile = document.getElementById('inputFreeBoardFile');
+			const fileListUl = document.getElementById('fileList');
+			
+			inputFreeBoardFile.addEventListener('change', function(e) {
+				fileListUl.innerHTML = '';
+				for (let i = 0; i < inputFreeBoardFile.files.length; i++) {
+					let listItem = document.createElement('li');
+					listItem.innerHTML = inputFreeBoardFile.files[i].name 
+						+ '&nbsp;&nbsp;'
+						+ inputFreeBoardFile.files[i].size + '(byte)';
+					fileListUl.appendChild(listItem);
+				}
+			}); // 이벤트 등록 끝
+			
 		});
 		
 // 		동적 이벤트 등록?
 		// 게시판 추가 버튼 작동
 		$('#container').on('click', '#btnFreeBoardInsert', function(event) {
-			var myObj = $(this);
+			event.preventDefault();
+					
 			
 			var inputMemberNoTag = $('#inputMemberNo');
 			var freeBoardTitleTag = $('#freeBoardTitle');
 			var freeBoardContentTag = $('#freeBoardContent');
 			
-			var jsonDataObj = {
-				freeBoardId: 0,
-				memberNo: inputMemberNoTag.val(),
-				freeBoardTitle: freeBoardTitleTag.val(),
-				freeBoardContent: freeBoardContentTag.val(),
-				createDate: null,
-				updateDate: null
-			};
+			const inputFreeBoardFileArr 
+				= $('#inputFreeBoardFile')[0].files;
+			
+			var formDataObj = new FormData();
+			
+			formDataObj.append('freeBoardId', 0);
+			formDataObj.append('memberNo', inputMemberNoTag.val());
+			formDataObj.append('freeBoardTitle', freeBoardTitleTag.val());
+			formDataObj.append('freeBoardContent'
+				, freeBoardContentTag.val());
+			
+// 			var jsonDataObj = {
+// 				freeBoardId: 0,
+// 				memberNo: inputMemberNoTag.val(),
+// 				freeBoardTitle: freeBoardTitleTag.val(),
+// 				freeBoardContent: freeBoardContentTag.val(),
+// 				createDate: null,
+// 				updateDate: null
+// 			};
+
+// 			파일 데이터 추가 처리
+			if(inputFreeBoardFileArr.length > 0){
+				for (var i = 0; i < inputFreeBoardFileArr.length; i++) {
+					formDataObj.append('inputFreeBoardFileArr' + i
+						, inputFreeBoardFileArr[i]);
+				}
+			}
 			
 			$.ajax({
 				url: '/freeBoard/',
 				method: 'POST',
-				contentType: 'application/json',
-				data: JSON.stringify(jsonDataObj),
-				dataType: 'json',
+// 				contentType: 'application/json', 제이슨은 파일처리 안됨
+				contentType: false,
+				// jquery에서 브라우저가 자동으로 content-type을 설정하도록 함
+				processData: false,
+				data: formDataObj,
 				success: function (data) {
-					alert(data);
+					alert('166줄: 드디어 파일 추가 될려나? ' + data);
 					location.href = './list';
 				},
 				error: function(xhr, status) {
@@ -148,8 +222,10 @@ tr > th{
 			dataType: 'json',
 			success: function (data) {
 // 				alert('일단 여기 도착하나? '+ data);
+				var freeBoardVo = data.freeBoardVo;
+				var freeBoardFileList = data.freeBoardFileList;
 				
-				let createDate = new Date(data.createDate)
+				let createDate = new Date(freeBoardVo.createDate)
 					.toLocaleString('ko-KR', {
 					year: 'numeric',
 					month: '2-digit',
@@ -168,24 +244,24 @@ tr > th{
 				htmlStr += '<td class="tableSubject">주제</td>';
 				htmlStr += '<td style="width: 735px;" colspan="3">';
 				htmlStr += '<input type="text" id="freeBoardTitle" name="freeBoardTitle" ';
-				htmlStr += 'value="'+data.freeBoardTitle+'" size="100px">';
+				htmlStr += 'value="'+freeBoardVo.freeBoardTitle+'" size="100px">';
 				htmlStr += '</td>';
 				htmlStr += '</tr>';
 				
 				htmlStr += '<tr>';
 				htmlStr += '<td class="tableSubject">작성자</td>';
-				htmlStr += '<td class="tableValue">'+data.memberName+'</td>';
+				htmlStr += '<td class="tableValue">'+freeBoardVo.memberName+'</td>';
 				htmlStr += '<td class="tableSubject">게시판 번호</td>';
 				htmlStr += '<td class="tableValue">';
 					
 		htmlStr += '<input type="text" id="freeBoardId" name="freeBoardId"';
-			htmlStr += 'value="'+data.freeBoardId+'" readonly="readonly">';
+			htmlStr += 'value="'+freeBoardVo.freeBoardId+'" readonly="readonly">';
 				htmlStr += '</td>';
 				htmlStr += '</tr>';
 				
 				htmlStr += '<tr>';
 				htmlStr += '<td class="tableSubject">이메일</td>';
-				htmlStr += '<td class="tableValue">'+data.email+'</td>';
+				htmlStr += '<td class="tableValue">'+freeBoardVo.email+'</td>';
 				htmlStr += '<td class="tableSubject">작성일자</td>';
 				htmlStr += '<td class="tableValue">';
 				htmlStr += createDate;
@@ -202,19 +278,51 @@ tr > th{
 				
 				htmlStr += '</table>';
 				
-				htmlStr += '<div>';
-				htmlStr += '<span>';
-htmlStr += '<button onclick="pageMoveFreeBoardListFnc();">이전페이지</button>';
-		htmlStr += '<button onclick="restRequestFreeBoardUpdateCtrFnc();">';
-				htmlStr += '수정완료</button>';
-				htmlStr += '</span>';
-				htmlStr += '</div>';
-				
+	htmlStr += '<div id="fileContainer" style="border: 1px solid black;">';
+	htmlStr += '<label for="inputFreeBoardFile">파일</label>';
+	htmlStr += '<input type="file" id="inputFreeBoardFile" name="freeBoardFileList"';
+	htmlStr += ' multiple>';
+	htmlStr += '<ul id="storeFileList" class="fileUploadList"></ul>';
+	htmlStr += '</div>';
+	
+	// 권한의 여부
+	var inputSessionMemberNoTag = $('#inputMemberNo');
+	
+	if(freeBoardVo.memberNo == inputSessionMemberNoTag.val()){
+		htmlStr += '<div>';
+		htmlStr += '<span>';
+	htmlStr += '<button onclick="pageMoveFreeBoardListFnc();">이전페이지</button>';
+	htmlStr += '<button onclick="restRequestFreeBoardUpdateCtrFnc();">';
+		htmlStr += '수정완료</button>';
+		htmlStr += '</span>';
+		htmlStr += '</div>';
+	}else{
+		htmlStr += '<div>';
+		htmlStr += '<span>';
+	htmlStr += '<button onclick="pageMoveFreeBoardListFnc();">이전페이지</button>';
+		htmlStr += '</span>';
+		htmlStr += '</div>';
+	}
 				containerTag.html(htmlStr);
 				
 				let freeBoardContentTag = $('#freeBoardContent');
-				freeBoardContentTag.text(data.freeBoardContent);
+				freeBoardContentTag.text(freeBoardVo.freeBoardContent);
 				
+				storeFileMakeUlFnc(freeBoardFileList);
+				
+			const inputFreeBoardFile 
+				= document.getElementById('inputFreeBoardFile');
+			const fileListUl = document.getElementById('fileList');
+			inputFreeBoardFile.addEventListener('change', function(e) {
+				fileListUl.innerHTML = '';
+				for (let i = 0; i < inputFreeBoardFile.files.length; i++) {
+					let listItem = document.createElement('li');
+					listItem.innerHTML = inputFreeBoardFile.files[i].name 
+						+ '&nbsp;&nbsp;'
+						+ inputFreeBoardFile.files[i].size + '(byte)';
+					fileListUl.appendChild(listItem);
+				}
+			}); // 이벤트 등록 끝
 			},
 			error: function(xhr, status) {
 				alert(xhr.status);
@@ -396,12 +504,14 @@ htmlStr += '<button onclick="pageMoveFreeBoardListFnc();">이전페이지</butto
 	
 	</div>
 	
+	
 	<jsp:include page="/WEB-INF/views/Tail.jsp"/>
 	<form id='freeBoardListForm' action="./list" method="post">
 		<input id='userSelectFreeBoardId' type="hidden" 
 			name="freeBoardId" value="">
 	
 	</form>
+	
 	
 	
 	

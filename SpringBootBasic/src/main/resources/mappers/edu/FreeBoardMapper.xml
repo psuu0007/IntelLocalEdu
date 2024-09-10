@@ -48,17 +48,45 @@
 		ON FB.MEMBER_NO = M.MEMBER_NO
 		WHERE FB.FREE_BOARD_ID = #{freeBoardId}
 	</select>
-
-
-
+	
+	<select id="freeBoardFileSelectList" parameterType="int"
+		resultType="map">
+		SELECT FBF.FREE_BOARD_FILE_ID as "freeBoardFileId"
+			, FBF.FREE_BOARD_ID "freeBoardId"
+			, FBF.ORIGINAL_FILE_NAME as "originalFileName"
+		    , FBF.STORED_FILE_NAME as "storedFileName"
+		    , ROUND(FBF.FREE_BOARD_FILE_SIZE/1024, 1) 
+		    	as "freeBoardFileSize" 
+		FROM FREE_BOARD_FILE FBF
+		WHERE FBF.FREE_BOARD_ID = #{freeBoardId}
+	</select>
+	
 	
 	<insert id="freeBoardInsertOne" 
-		parameterType="com.edu.freeBoard.domain.FreeBoardVo">
+		parameterType="com.edu.freeBoard.domain.FreeBoardVo"
+		useGeneratedKeys="true" keyProperty="freeBoardId">
+		<selectKey keyProperty="freeBoardId" resultType="int" 
+			order="BEFORE">
+			SELECT FREE_BOARD_ID_SEQ.NEXTVAL
+			FROM DUAL
+		</selectKey>
+		
 		INSERT INTO FREE_BOARD
 		VALUE(  FREE_BOARD_ID, MEMBER_NO, FREE_BOARD_TITLE
 		    , FREE_BOARD_CONTENT, CREATE_DATE, UPDATE_DATE)
-		VALUES(FREE_BOARD_ID_SEQ.NEXTVAL, #{memberNo}, #{freeBoardTitle}, 
+		VALUES(#{freeBoardId}, #{memberNo}, #{freeBoardTitle}, 
 		    #{freeBoardContent}, SYSDATE, SYSDATE)
+	</insert>
+	
+	<insert id="freeBoardFileInsertOne"	parameterType="map">
+		INSERT INTO FREE_BOARD_FILE
+			(FREE_BOARD_FILE_ID, FREE_BOARD_ID
+			, ORIGINAL_FILE_NAME, STORED_FILE_NAME, FREE_BOARD_FILE_SIZE
+			, CREATE_DATE, UPDATE_DATE)
+		VALUES
+			(FREE_BOARD_FILE_ID_SEQ.NEXTVAL, #{parentId}
+			, #{originalFileName}, #{storedFileName}, #{fileSize}
+			, SYSDATE, SYSDATE)
 	</insert>
 	
 	<update id="freeBoardUpdateOne" parameterType="freeBoardVo">

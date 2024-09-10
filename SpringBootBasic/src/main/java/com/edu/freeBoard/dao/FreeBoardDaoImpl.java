@@ -52,6 +52,19 @@ public class FreeBoardDaoImpl implements FreeBoardDao{
 		// TODO Auto-generated method stub
 		sqlSession.update(namespace + "freeBoardUpdateOne", freeBoardVo);
 	}
+
+	@Override
+	public void freeBoardFileInsertOne(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		sqlSession.insert(namespace + "freeBoardFileInsertOne", map);
+	}
+
+	@Override
+	public List<Map<String, Object>> freeBoardFileSelectList(int no) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList(namespace + "freeBoardFileSelectList"
+			, no);
+	}
 	
 	
 }
