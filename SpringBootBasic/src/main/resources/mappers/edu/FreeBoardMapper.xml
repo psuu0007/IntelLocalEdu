@@ -120,5 +120,22 @@
 		</foreach>
 	</delete>
 
+	<select id="selectFileByFreeBoardId" parameterType="int"
+		resultType="map">
+		SELECT FREE_BOARD_FILE_ID, STORED_FILE_NAME
+		FROM FREE_BOARD_FILE
+		WHERE FREE_BOARD_ID = #{freeBoardId}
+	</select>
+
+	<delete id="deleteFileByFreeBoardId" parameterType="int">
+		DELETE FROM FREE_BOARD_FILE
+		WHERE FREE_BOARD_ID = #{freeBoardId}
+	</delete>
+	
+	<delete id="freeBoardDeleteOne" parameterType="map">
+		DELETE FROM FREE_BOARD
+		WHERE MEMBER_NO = #{memberNo}
+		AND FREE_BOARD_ID = #{freeBoardId}
+	</delete>
 	
 </mapper>

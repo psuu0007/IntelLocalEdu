@@ -21,6 +21,7 @@ spring:
       prefix: /WEB-INF/views/
       suffix: .jsp
 
+
 server:
   port: 8888
   servlet:

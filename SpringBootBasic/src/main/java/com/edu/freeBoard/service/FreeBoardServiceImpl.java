@@ -1,7 +1,6 @@
 package com.edu.freeBoard.service;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -106,6 +105,28 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 				freeBoardDao.freeBoardFileInsertOne(map);
 			}
 		}
+	}
+
+	@Transactional
+	@Override
+	public void freeBoardDeleteOne(int freeBoardId, int memberNo) {
+		// TODO Auto-generated method stub
+		
+		try {
+			List<Map<String, Object>> tempFileList = 
+					freeBoardDao.selectFileByFreeBoardId(freeBoardId);
+			
+			freeBoardDao.deleteFileByFreeBoardId(freeBoardId);
+			
+			if(tempFileList != null) {
+				fileUtils.parseDeleteFileInfo(tempFileList);
+			}
+			freeBoardDao.freeBoardDeleteOne(freeBoardId, memberNo);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }

@@ -89,13 +89,15 @@ public class FreeBoardController {
 	//게시판 수정 화면으로 이동
 	@GetMapping("/{freeBoardId}")
 	public ResponseEntity<Map<String, Object>> 
-		freeBoardUpdate(@PathVariable int freeBoardId){
+		freeBoardUpdate(@PathVariable int freeBoardId, @RequestParam int curPage){
 		log.info(logTitleMsg);
-		log.info("@GetMapping freeBoardUpdate freeBoardId: {}"
-			, freeBoardId);
+		log.info("@GetMapping freeBoardUpdate freeBoardId: {}, curPage: {}"
+			, freeBoardId, curPage);
 		
 		Map<String, Object> resultMap = 
 			freeBoardService.freeBoardSelectOne(freeBoardId);
+		
+		resultMap.put("curPage", curPage);
 		
 		return ResponseEntity.ok(resultMap);
 	}
@@ -140,6 +142,11 @@ public class FreeBoardController {
 	@DeleteMapping("/{freeBoardId}")
 	public ResponseEntity<Integer> freeBoardDelete(@PathVariable int freeBoardId
 		, @RequestParam int memberNo, @RequestParam int curPage){
+		log.info(logTitleMsg);
+		log.info("@DeleteMapping freeBoardDelete freeBoardId: {}, memberNo: {} "
+			+ ", curPage: {}", freeBoardId, memberNo, curPage);
+		
+		freeBoardService.freeBoardDeleteOne(freeBoardId, memberNo);
 		
 		return ResponseEntity.ok(curPage);
 	}

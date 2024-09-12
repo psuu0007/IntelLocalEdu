@@ -136,7 +136,7 @@ tr > th{
 	
 	htmlStr += '<div>';
 	htmlStr += '<span>';
-	htmlStr += '<button onclick="pageMoveFreeBoardListFnc();">이전페이지</button>';
+	htmlStr += '<button onclick="pageMoveFreeBoardListFnc(1);">이전페이지</button>';
 	htmlStr += '<button id="btnFreeBoardInsert">작성완료</button>';
 	htmlStr += '</span>';
 	htmlStr += '</div>';
@@ -227,14 +227,19 @@ tr > th{
 		let freeBoardIdStr = parentTr.children().eq(0).text();
 // 		alert('freeBoardIdStr: ' + freeBoardIdStr);
 		
+		var curPageInput = $('#curPage');
+		
 		$.ajax({
-			url: '/freeBoard/' + freeBoardIdStr,
+			url: '/freeBoard/' + freeBoardIdStr + '?curPage=' + curPageInput.val(),
 			method: 'GET',
 			dataType: 'json',
 			success: function (data) {
 // 				alert('일단 여기 도착하나? '+ data);
 				var freeBoardVo = data.freeBoardVo;
 				var freeBoardFileList = data.freeBoardFileList;
+				var curPageStr = data.curPage;
+				
+				console.log('curPageStr: ' + curPageStr);
 				
 				let createDate = new Date(freeBoardVo.createDate)
 					.toLocaleString('ko-KR', {
@@ -245,6 +250,8 @@ tr > th{
 					minute: '2-digit',
 					second: '2-digit'
 				});
+				
+				
 				
 				let containerTag = $('#container');
 				let htmlStr = '';
@@ -302,15 +309,21 @@ tr > th{
 	if(freeBoardVo.memberNo == inputSessionMemberNoTag.val()){
 		htmlStr += '<div>';
 		htmlStr += '<span>';
-	htmlStr += '<button onclick="pageMoveFreeBoardListFnc();">이전페이지</button>';
+	htmlStr += '<button onclick="pageMoveFreeBoardListFnc('+curPageStr+');">이전페이지</button>';
 	htmlStr += '<button onclick="restRequestFreeBoardUpdateCtrFnc();">';
 		htmlStr += '수정완료</button>';
+		
+		htmlStr += '<input type="button" value="삭제하기" ';
+		htmlStr += 'onclick="restRequestFreeBoardDeleteCtrFnc('
+				+ freeBoardVo.freeBoardId + ', ' + freeBoardVo.memberNo + ', ' 
+				+ curPageStr + ');">';
+				
 		htmlStr += '</span>';
 		htmlStr += '</div>';
 	}else{
 		htmlStr += '<div>';
 		htmlStr += '<span>';
-	htmlStr += '<button onclick="pageMoveFreeBoardListFnc();">이전페이지</button>';
+	htmlStr += '<button onclick="pageMoveFreeBoardListFnc('+curPageStr+');">이전페이지</button>';
 		htmlStr += '</span>';
 		htmlStr += '</div>';
 	}
@@ -445,8 +458,8 @@ tr > th{
 	
 	<div>
 	  <span>
-	    <button onclick="pageMoveFreeboardListFnc();">이전페이지</button>
-	    <button onclick="resetRequestFreeBoardUpdateCtrFnc();">수정 완료</button>
+	    <button onclick="pageMoveFreeBoardListFnc(1);">이전페이지</button>
+	    <button onclick="restRequestFreeBoardUpdateCtrFnc();">수정 완료</button>
 		<input type="button" value="삭제하기" 
 			onclick="restRequestFreeBoardDeleteCtrFnc(\${freeBoardVo.freeBoardId}
 			, \${freeBoardVo.memberNo}, 1);">
@@ -482,7 +495,11 @@ tr > th{
 			method : 'DELETE',
 			dataType : 'text',
 			success : function (data) {
-				location.href = './list' + '?curPage=' + curPageStr;
+				alert("성공 485line: " + data);
+				
+				var curPage = data;
+				
+				location.href = './list' + '?curPage=' + curPage;
 			},
 			error : function(xhr, status) {
 				console.log(xhr.status);
@@ -548,7 +565,6 @@ tr > th{
 			name="freeBoardId" value="">
 	
 	</form>
-	
 	
 </body>
 </html>

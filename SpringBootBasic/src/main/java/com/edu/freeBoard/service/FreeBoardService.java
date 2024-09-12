@@ -19,4 +19,6 @@ public interface FreeBoardService {
 	public void freeBoardUpdateOne(FreeBoardVo freeBoardVo
 		, MultipartHttpServletRequest mhr
 		, List<Integer> delFreeBoardFileIdList) throws Exception;
+	
+	public void freeBoardDeleteOne(int freeBoardId, int memberNo);
 }

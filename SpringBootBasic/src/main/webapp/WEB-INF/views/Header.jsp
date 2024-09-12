@@ -7,8 +7,14 @@
 		location.href = '/member/list';
 	}
 	
-	function pageMoveFreeBoardListFnc() {
-		location.href = '/freeBoard/list';
+	function pageMoveFreeBoardListFnc(curPage) {
+
+		if(curPage){
+			location.href = '/freeBoard/list?curPage=' + curPage;
+		}else{
+			location.href = '/freeBoard/list';
+		}
+		
 	}
 </script>
 
@@ -19,7 +25,7 @@
 	<span style="border: 1px solid black;" 
 		onclick="pageMoveMemberListFnc();">회원</span>
 	<span style="border: 1px solid black;" 
-		onclick="pageMoveFreeBoardListFnc();">
+		onclick="pageMoveFreeBoardListFnc(1);">
 		자유게시판
 	</span>
 	
