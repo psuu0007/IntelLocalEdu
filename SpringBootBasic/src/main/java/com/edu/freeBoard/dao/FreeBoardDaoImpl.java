@@ -65,6 +65,21 @@ public class FreeBoardDaoImpl implements FreeBoardDao{
 		return sqlSession.selectList(namespace + "freeBoardFileSelectList"
 			, no);
 	}
+
+	@Override
+	public List<Map<String, Object>> 
+		fileSelectStoredFileName(List<Integer> delFreeBoardFileIdList) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList(namespace + "fileSelectStoredFileName"
+			, delFreeBoardFileIdList);
+	}
+
+	@Override
+	public int deleteFileByFreeFileIds(List<Integer> delFreeBoardFileIdList) {
+		// TODO Auto-generated method stub
+		return sqlSession.delete(namespace + "deleteFileByFreeFileIds"
+			, delFreeBoardFileIdList);
+	}
 	
 	
 }

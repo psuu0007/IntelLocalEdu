@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -103,25 +104,44 @@ public class FreeBoardController {
 	@PatchMapping("/{freeBoardId}")
 	public ResponseEntity<?> 
 		freeBoardUpdateCtr(@PathVariable int freeBoardId
-			, @RequestBody FreeBoardVo freeBoardVo){
+			, @RequestParam Map<String, String> freeBoardMap
+			, MultipartHttpServletRequest mhr
+			, @RequestParam(value="delFreeBoardFileIdList", required = false)
+				List<Integer> delFreeBoardFileIdList){
 		log.info(logTitleMsg);
 		log.info("@PatchMapping freeBoardUpdateCtr freeBoardId: {}, "
-				+ "freeBoardVo: {}", freeBoardId, freeBoardVo);
+			+ "freeBoardMap: {}, delFreeBoardFileIdList: {}"
+			, freeBoardId, freeBoardMap, delFreeBoardFileIdList);
 		
-		if(freeBoardVo.getMemberNo() == 0) {
+		FreeBoardVo freeBoardVo = new FreeBoardVo();
+		freeBoardVo.setFreeBoardId(freeBoardId);
+		freeBoardVo.setMemberNo(Integer.parseInt(freeBoardMap.get("memberNo")));
+		freeBoardVo.setFreeBoardTitle(freeBoardMap.get("freeBoardTitle"));
+		freeBoardVo.setFreeBoardContent(freeBoardMap.get("freeBoardContent"));
+		
+		try {
+			freeBoardService.freeBoardUpdateOne(freeBoardVo, mhr, delFreeBoardFileIdList);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
 			Map<String, String> errorResponseMap = new HashMap<>();
 			errorResponseMap.put("errorMsg", "게시판 등록자가 아닌것 같다.");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.contentType(MediaType.APPLICATION_JSON).body(errorResponseMap);
 		}
+//		수정?
 		
-		System.err.println("???되나? " + freeBoardVo.getMemberNo());
+		Map<String, Object> resultMap 
+			= freeBoardService.freeBoardSelectOne(freeBoardId);
 		
-		freeBoardService.freeBoardUpdateOne(freeBoardVo);
-//		@todo 나중에 처리하자 원래 되던거
-//		freeBoardVo = freeBoardService.freeBoardSelectOne(freeBoardId);
+		return ResponseEntity.ok(resultMap);
+	}
+	
+	@DeleteMapping("/{freeBoardId}")
+	public ResponseEntity<Integer> freeBoardDelete(@PathVariable int freeBoardId
+		, @RequestParam int memberNo, @RequestParam int curPage){
 		
-		return ResponseEntity.ok(freeBoardVo);
+		return ResponseEntity.ok(curPage);
 	}
 	
 }

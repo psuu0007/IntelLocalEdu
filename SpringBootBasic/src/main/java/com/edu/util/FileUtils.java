@@ -61,5 +61,23 @@ public class FileUtils {
 		
 		return fileList;
 	}
+
+	// 실제 파일 삭제
+	public void parseDeleteFileInfo(List<Map<String, Object>> tempFileList) 
+		throws Exception{
+		// TODO Auto-generated method stub
+		
+		for (Map<String, Object> tempFileMap : tempFileList) {
+			String storedFileName = (String) tempFileMap.get("STORED_FILE_NAME");
+			
+			File file = new File(FILE_PATH + "/" + storedFileName);
+			
+			if(file.exists()) {
+				file.delete();
+			}else {
+				System.err.println("파일이 존재하지 않습니다.");
+			}
+		}
+	}
 	
 }

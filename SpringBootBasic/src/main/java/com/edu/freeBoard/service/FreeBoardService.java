@@ -16,5 +16,7 @@ public interface FreeBoardService {
 	public void freeBoardInsertOne(FreeBoardVo freeBoardVo
 		, MultipartHttpServletRequest mhr) throws Exception;
 	
-	public void freeBoardUpdateOne(FreeBoardVo freeBoardVo);
+	public void freeBoardUpdateOne(FreeBoardVo freeBoardVo
+		, MultipartHttpServletRequest mhr
+		, List<Integer> delFreeBoardFileIdList) throws Exception;
 }

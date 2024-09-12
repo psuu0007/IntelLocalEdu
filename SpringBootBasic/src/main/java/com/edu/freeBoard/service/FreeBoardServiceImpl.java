@@ -1,6 +1,7 @@
 package com.edu.freeBoard.service;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.edu.freeBoard.dao.FreeBoardDao;
 import com.edu.freeBoard.domain.FreeBoardVo;
 import com.edu.util.FileUtils;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class FreeBoardServiceImpl implements FreeBoardService{
@@ -71,10 +74,38 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 		}
 	}
 
+
+	@Transactional
 	@Override
-	public void freeBoardUpdateOne(FreeBoardVo freeBoardVo) {
+	public void freeBoardUpdateOne(FreeBoardVo freeBoardVo
+		, MultipartHttpServletRequest mhr,
+		List<Integer> delFreeBoardFileIdList) throws Exception {
 		// TODO Auto-generated method stub
 		freeBoardDao.freeBoardUpdateOne(freeBoardVo);
+		
+		int parentSeq = freeBoardVo.getFreeBoardId();
+		
+		if(delFreeBoardFileIdList != null) {
+			List<Map<String, Object>> tempFileList =
+				freeBoardDao.fileSelectStoredFileName(delFreeBoardFileIdList);
+//			JPA
+			freeBoardDao.deleteFileByFreeFileIds(delFreeBoardFileIdList);
+			if(tempFileList != null) {
+				fileUtils.parseDeleteFileInfo(tempFileList);
+			}
+			
+		} // if문 
+		
+		// 기존꺼 재사용 사례
+		List<Map<String, Object>> fileInsertList =
+			fileUtils.parseInsertFileInfo(parentSeq, mhr);
+		
+		if(fileInsertList.isEmpty() == false) {
+			
+			for (Map<String, Object> map : fileInsertList) {
+				freeBoardDao.freeBoardFileInsertOne(map);
+			}
+		}
 	}
 
 }

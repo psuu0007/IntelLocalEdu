@@ -16,6 +16,9 @@ public interface FreeBoardDao {
 	public void freeBoardUpdateOne(FreeBoardVo freeBoardVo);
 	
 	public void freeBoardFileInsertOne(Map<String, Object> map);
+	public List<Map<String, Object>> 
+		fileSelectStoredFileName(List<Integer> delFreeBoardFileIdList);
+	public int deleteFileByFreeFileIds(List<Integer> delFreeBoardFileIdList);
 	
 	
 }
