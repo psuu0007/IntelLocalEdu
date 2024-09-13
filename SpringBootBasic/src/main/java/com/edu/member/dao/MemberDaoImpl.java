@@ -2,6 +2,7 @@ package com.edu.member.dao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,9 @@ public class MemberDaoImpl implements MemberDao {
 	String namespace = "com.edu.member.";
 	
 	@Override
-	public List<MemberVo> memberSelectList() {
-		// TODO Auto-generated method stub
-		return sqlSession.selectList(namespace + "memberSelectList");
+	public List<MemberVo> memberSelectList(Map<String, Object> map) {
+		
+		return sqlSession.selectList(namespace + "memberSelectList", map);
 	}
 
 	@Override

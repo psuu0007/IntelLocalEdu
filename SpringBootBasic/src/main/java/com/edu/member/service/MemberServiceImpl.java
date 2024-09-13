@@ -1,6 +1,8 @@
 package com.edu.member.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,9 +17,14 @@ public class MemberServiceImpl implements MemberService {
 	public MemberDao memberDao;
 	
 	@Override
-	public List<MemberVo> memberSelectList() {
+	public List<MemberVo> memberSelectList(String searchOption, String keyword) {
 		// TODO Auto-generated method stub
-		return memberDao.memberSelectList();
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("searchOption", searchOption);
+		map.put("keyword", keyword);
+		
+		return memberDao.memberSelectList(map);
 	}
 
 	@Override

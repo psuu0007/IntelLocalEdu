@@ -57,13 +57,44 @@ table, th, tr, td{
 		<a href="./add">신규 회원 등록</a>
 	</p>
 	
+	<div>
+		<form id="pagingForm" action="./list" method="get">
+			<select name="searchOption">
+			<c:choose>
+				<c:when test="${searchMap.searchOption == 'all'}">
+					<option value="all" selected="selected">이름+이메일</option>
+					<option value="memberName">이름</option>
+					<option value="email">이메일</option>
+				</c:when>
+				<c:when test="${searchMap.searchOption == 'memberName'}">
+					<option value="all">이름+이메일</option>
+					<option value="memberName" selected="selected">이름</option>
+					<option value="email">이메일</option>
+				</c:when>
+				<c:when test="${searchMap.searchOption == 'email'}">
+					<option value="all">이름+이메일</option>
+					<option value="memberName">이름</option>
+					<option value="email" selected="selected">이메일</option>
+				</c:when>
+			</c:choose>
+			</select>
+			<input type="text" name="keyword" value="${searchMap.keyword}"
+				placeholder="회원명 or 이메일 검색">
+			<input type="submit" value="검색">
+		</form>
+	</div>
+	
 	<table>
 		<tr>
 			<th>번호</th><th>이름</th>
 			<th>이메일</th><th>생성일</th><th>비고[삭제]</th>
 		</tr>
 	
-	<c:forEach var="memberVo" items="${memberList}">
+	<c:choose>
+	
+		<c:when test="${not empty memberList}">
+	
+			<c:forEach var="memberVo" items="${memberList}">
 		<tr>
 			<td>${memberVo.memberNo}</td>
 			<td>${memberVo.memberName}</td>
@@ -78,8 +109,16 @@ table, th, tr, td{
 				<a href='./delete?memberNo=${memberVo.memberNo}'>[삭제]</a>
 			</td>
 		</tr>
-	</c:forEach>
+			</c:forEach>
+		</c:when>
 	
+		<c:otherwise>
+		<tr>
+			<td colspan="5">회원이 존재하지 않습니다</td>
+		</tr>
+		</c:otherwise>
+	
+	</c:choose>
 	</table>
 	
 	<jsp:include page="/WEB-INF/views/Tail.jsp"/>

@@ -53,6 +53,35 @@ tr > th{
 </style>
 
 <script type="text/javascript">
+	var fileUpdateCnt = 0;
+	
+	function myImgFileUpdateFnc(updateFile) {
+		var updateFileTag = $(updateFile);
+		
+		updateFileTag.attr('name', 'updateFreeBoardFileArr' + fileUpdateCnt);
+		fileUpdateCnt++;
+		
+		console.log(updateFileTag[0].files[0]);
+		var fileObj = updateFileTag[0].files[0];
+		
+		var parentLiTag = updateFileTag.closest('li');
+		
+		var imgTag = parentLiTag.children('img');
+		
+		if(fileObj){
+			var reader = new FileReader();
+			
+			reader.onload = function(e) {
+				imgTag.attr('src', e.target.result);
+			};
+			
+			reader.readAsDataURL(fileObj);
+			
+		}
+		
+		parentLiTag.append('<span delfileid="' + imgTag.attr('fileid') + '"></span>');
+	}
+
 	function storeFileMakeUlFnc(freeBoardFileList) {
 		const storeFileListUl = $('#storeFileList');
 		
@@ -74,9 +103,9 @@ tr > th{
 			+ freeBoardFileList[i].freeBoardFileSize + '(kb)'
 			+ '<img alt="image not found" src="/img/' 
 			+ freeBoardFileList[i].storedFileName 
-			+ '" style="width: 150px;" fileId="'
+			+ '" style="width: 150px;" fileid="'
 			+ freeBoardFileList[i].freeBoardFileId+'"/>'
-			+ '<span><input type="button" value="수정">'
+		+ '<span><input type="file" value="수정" onchange="myImgFileUpdateFnc(this);">'
 			+ '<input type="button" value="삭제" id="imgFileDel'+i+'"></span>';
 			
 			listItem.innerHTML = liHtmlStr;
@@ -89,8 +118,8 @@ tr > th{
 			var parentLi = $(this).closest('li');
 			var imgTag = parentLi.find('img');
 			
-			parentLi.html('<span delFileId="' 
-				+imgTag.attr('fileId') + '">이미지가 삭제되었습니다</span>');
+			parentLi.html('<span delfileid="' 
+				+imgTag.attr('fileid') + '">이미지가 삭제되었습니다</span>');
 		});	
 	} // 파일 ui제작 함수 end
 	
@@ -374,9 +403,20 @@ tr > th{
 		var storeFileListUl = $('#storeFileList');
 		console.log(storeFileListUl);
 		
+// 		기존의 이미지에서 수정을 누르면 수행될 로직
+		const updateFreeBoardFileArr = 
+			$('#storeFileList').find('input[name^=updateFreeBoardFileArr]');
+		
+		if(updateFreeBoardFileArr.length > 0){
+			for (let i = 0; i < updateFreeBoardFileArr.length; i++) {
+				formDataObj.append(updateFreeBoardFileArr.eq(i).attr('name')
+					, updateFreeBoardFileArr[i].files[0]);
+			}
+		}
+		
 		// 이미지를 삭제할 예정인 데이터 수집
-		storeFileListUl.find('span[delFileId]').each(function (index, item) {
-			formDataObj.append('delFreeBoardFileIdList', $(item).attr('delFileId'));
+		storeFileListUl.find('span[delfileid]').each(function (index, item) {
+			formDataObj.append('delFreeBoardFileIdList', $(item).attr('delfileid'));
 		});
 		
 		// 새롭게 생긴 파일들 데이터 수집

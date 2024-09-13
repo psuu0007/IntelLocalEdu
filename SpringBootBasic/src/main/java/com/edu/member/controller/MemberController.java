@@ -1,7 +1,9 @@
 package com.edu.member.controller;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,14 +84,23 @@ public class MemberController {
 	
 	
 	@GetMapping("/list")
-	public String getMemberList(Model model) {
+	public String getMemberList(@RequestParam(defaultValue = "all") 
+		String searchOption, @RequestParam(defaultValue = "") String keyword
+		, Model model) {
 		log.info(logTitleMsg);
-		log.info("getMemberList");
+		log.info("@GetMapping getMemberList searchOption: {}, keyword: {}", 
+			searchOption, keyword);
 		
-		List<MemberVo> memberList = memberService.memberSelectList();
+		List<MemberVo> memberList = 
+			memberService.memberSelectList(searchOption, keyword);
+		
+		Map<String, Object> searchMap = new HashMap<>();
+		searchMap.put("searchOption", searchOption);
+		searchMap.put("keyword", keyword);
 		
 		model.addAttribute("memberList", memberList);
-		
+		model.addAttribute("searchMap", searchMap);
+
 		return "member/MemberListView";
 	}
 	

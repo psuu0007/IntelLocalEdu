@@ -13,10 +13,29 @@
 			javaType="java.util.Date" />
 	</resultMap>
 
-	<select id="memberSelectList" resultMap="memberResultMap">
-		SELECT MEMBER_NO, EMAIL,
-		MEMBER_NAME, CRE_DATE
+	<sql id="search">
+		<choose>
+			<when test="searchOption == 'all'">
+					MEMBER_NAME LIKE '%' || #{keyword} || '%'
+				OR 	EMAIL LIKE '%' || #{keyword} || '%'
+			</when>
+			<when test="searchOption == 'memberName'">
+				MEMBER_NAME LIKE '%' || #{keyword} || '%'
+			</when>
+			
+			<otherwise>
+				EMAIL LIKE '%' || #{keyword} || '%'
+			</otherwise>
+		</choose>
+	</sql>
+
+	<select id="memberSelectList" parameterType="map"
+		resultMap="memberResultMap">
+		SELECT MEMBER_NO, EMAIL, MEMBER_NAME, CRE_DATE
 		FROM MEMBER
+		<where>
+			<include refid="search"></include>
+		</where>
 		ORDER BY MEMBER_NO DESC
 	</select>
 

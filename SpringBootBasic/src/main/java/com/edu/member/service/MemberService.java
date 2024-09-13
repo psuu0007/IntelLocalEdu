@@ -6,7 +6,7 @@ import com.edu.member.domain.MemberVo;
 
 public interface MemberService {
 
-	public List<MemberVo> memberSelectList();
+	public List<MemberVo> memberSelectList(String searchOption, String keyword);
 	public MemberVo memberExist(String email, String password);
 	public int memberInsertOne(MemberVo memberVo);
 	public MemberVo memberSelectOne(int no);
