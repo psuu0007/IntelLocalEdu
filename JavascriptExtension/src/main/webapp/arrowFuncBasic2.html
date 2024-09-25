@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>arrowFuncBasic2.html</title>
+
+<script type="text/javascript">
+
+//arrow function 표기법
+// const multiply = (a, b) => {
+// 	return a * b;
+// }
+
+// console.log(multiply(10, 20));
+
+	window.onload = function() {
+		const changeText = function() {
+			let rootTag = document.getElementById('root');
+			
+			rootTag.innerHTML = '박성욱';
+		}
+		
+// 		changeText();
+		
+		const changeText2 = () => {
+			let rootTag = document.getElementById('root');
+			
+			rootTag.innerHTML = '박성욱2';
+		}
+		
+		changeText2();
+	};
+
+</script>
+
+</head>
+<body>
+
+	<div id='root'>
+		이곳에 자신의 이름을 출력한다
+	</div>
+
+</body>
+</html>
